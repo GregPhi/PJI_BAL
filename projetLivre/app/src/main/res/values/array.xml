@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="main_choice">
+        <item>Nouveau(x) livre(s)</item>
+        <item>Prêt de livre(s)</item>
+        <item>Rendu de livre(s)</item>
+        <item>MAJ livres</item>
+    </string-array>
+
+    <string-array name="annee">
+        <item>Seconde</item>
+        <item>Premiere</item>
+        <item>Terminale</item>
+    </string-array>
+
+    <string-array name="etat_livre">
+        <item>Neuf</item>
+        <item>Bon etat</item>
+        <item>Usure faible</item>
+        <item>Usure moyenne</item>
+        <item>Usure forte</item>
+        <item>Autre</item>
+    </string-array>
+
+    <string-array name="statut_livre">
+        <item>A préparer</item>
+        <item>Préparé</item>
+        <item>Emprunté</item>
+        <item>Rendu</item>
+        <item>Autre</item>
+    </string-array>
+
+</resources>
