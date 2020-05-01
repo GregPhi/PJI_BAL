@@ -1,0 +1,18 @@
+{
+  "user" : "test",
+  "methode" : "Prêt de livre(s)",
+  "livres" : [
+    {
+      "id" : ,
+      "code_barre" :,
+      "title" :,
+      "matiere":,
+      "editeur":,
+      "description":,
+      "commentaire":,
+      "annee":,
+      "classe":,
+      "etats":
+    }
+  ]
+}
