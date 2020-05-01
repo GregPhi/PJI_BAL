@@ -22,6 +22,7 @@ public class Book implements Parcelable {
     private String title;
     /**/
     private String matiere;
+    /**/
     private String editeur;
     /**/
     private String description;

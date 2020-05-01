@@ -35,7 +35,7 @@ public class ListeNewBookActivity extends AppCompatActivity {
         setContentView(R.layout.newliste_livres);
 
         RecyclerView recyclerView = findViewById(R.id.recyclerview);
-        final BookListAdapter adapter = new BookListAdapter(this);
+        final BookListAdapter<ListeNewBookActivity> adapter = new BookListAdapter(this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -88,5 +88,13 @@ public class ListeNewBookActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void removeBook(Book current){
+
+    }
+
+    public void infosBook(Book current){
+
     }
 }

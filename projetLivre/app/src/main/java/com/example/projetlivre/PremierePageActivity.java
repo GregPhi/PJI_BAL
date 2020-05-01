@@ -15,6 +15,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.projetlivre.GET.qrCodeConnection.FetchConnection;
 import com.example.projetlivre.GET.qrCodeConnection.QRCodeLoader;
 import com.example.projetlivre.GET.qrCodeConnection.QRCodeNetworkUtils;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -34,40 +35,36 @@ import androidx.loader.content.Loader;
 public class PremierePageActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<String> {
     private static String urlConnection = "";
     private final static String[] users = {"user1","user2"};
+    private EditText numUser;
+    private Spinner choix;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_layout);
-        final EditText numUser = findViewById(R.id.numUser);
-        final Spinner choix = findViewById(R.id.choix);
-        final Button connectText = findViewById(R.id.validateMain);
-        connectText.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View view){
-                if (TextUtils.isEmpty(numUser.getText())){
-                    Toast.makeText(getApplicationContext(), "Merci d'indiquer un nom d'utilisateur", Toast.LENGTH_LONG).show();
-                }else{
-                    String c = choix.getSelectedItem().toString();
-                    switch(c) {
-                        case "Prêt de livre(s)":
-                            break;
-                        case "Rendu de livre(s)":
-                            break;
-                        case "MAJ livres":
-                            break;
-                        default:
-                            String user = numUser.getText().toString();
-                            for(String u : users){
-                                if(user.equals(u)){
-                                    Intent intent = new Intent(PremierePageActivity.this, NewBookActivity.class);
-                                    startActivity(intent);
-                                }
-                            }
-                            break;
-                    }
+        this.numUser = findViewById(R.id.numUser);
+        this.choix = findViewById(R.id.choix);
+    }
+
+    public void validate(View view){
+        if (TextUtils.isEmpty(numUser.getText())){
+            Toast.makeText(getApplicationContext(), "Merci d'indiquer un nom d'utilisateur", Toast.LENGTH_LONG).show();
+        }else{
+            boolean b = false;
+            String user = numUser.getText().toString();
+            for(String u : users) {
+                if(user.equals(u)){
+                    b = true;
+                    continue;
                 }
             }
-        });
+            if(b){
+                String c = choix.getSelectedItem().toString();
+                this.choiceMethode(c);
+            }else{
+                Toast.makeText(getApplicationContext(), "Nom d'utilisateur faux", Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     @NonNull
@@ -86,48 +83,6 @@ public class PremierePageActivity extends AppCompatActivity implements LoaderMan
 
     @Override
     public void onLoaderReset(@NonNull Loader<String> loader) {
-    }
-
-    public class FetchConnection extends AsyncTask<String, Void, String> {
-        private String user;
-        private String methode;
-
-        FetchConnection() {
-            this.user = "";
-            this.methode = "";
-        }
-
-        public String getUser(){ return this.user; }
-        public String getMethode(){ return this.methode; }
-
-        @Override
-        protected String doInBackground(String... strings) {
-            return QRCodeNetworkUtils.getCoonectionInfo(strings[0]);
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-
-            try {
-                // Convert the response into a JSON object.
-                JSONObject jsonObject = new JSONObject(s);
-                String u = null;
-                String m = null;
-                u = jsonObject.getString("user");
-                m = jsonObject.getString("methode");
-
-                // If both are found, display the result.
-                if (u != null && m != null) {
-                    this.user = u;
-                    this.methode = m;
-                } else {
-                    this.user = "NO DATA";
-                    this.methode = "NO DATA";
-                }
-            } catch (Exception e) {
-            }
-        }
     }
 
     @Override
@@ -165,8 +120,6 @@ public class PremierePageActivity extends AppCompatActivity implements LoaderMan
     }
 
     public void connection(View view){
-        Toast term = Toast.makeText(getApplicationContext(), "HERE", Toast.LENGTH_SHORT);
-        term.show();
         IntentIntegrator scanIntegrator = new IntentIntegrator(this);
         scanIntegrator.initiateScan();
     }
@@ -178,6 +131,8 @@ public class PremierePageActivity extends AppCompatActivity implements LoaderMan
             case "Rendu de livre(s)":
                 break;
             case "MAJ livres":
+                Intent majBook = new Intent(PremierePageActivity.this, MiseAJourBookActivity.class);
+                startActivity(majBook);
                 break;
             default:
                 Intent newBook = new Intent(PremierePageActivity.this, NewBookActivity.class);

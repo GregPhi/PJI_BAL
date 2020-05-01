@@ -20,12 +20,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-        <TextView
-            android:id="@+id/description"
-            android:hint="Description"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
 
         <TextView
             android:id="@+id/matiere"
@@ -36,6 +30,12 @@
         <TextView
             android:id="@+id/annee"
             android:hint="Année"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/etats"
+            android:hint="Etats"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 

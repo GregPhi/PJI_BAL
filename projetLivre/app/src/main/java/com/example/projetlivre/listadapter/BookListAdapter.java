@@ -1,11 +1,14 @@
 package com.example.projetlivre.listadapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.projetlivre.ListeNewBookActivity;
@@ -18,7 +21,7 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.BookVi
 
     class BookViewHolder extends RecyclerView.ViewHolder {
         private final TextView titleItemView;
-        private final TextView descriptionItemView;
+        private final TextView etatsItemView;
         private final TextView matiereItemView;
         private final TextView anneeItemView;
         private final Button bD;
@@ -27,7 +30,7 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.BookVi
         private BookViewHolder(final View itemView) {
             super(itemView);
             titleItemView = itemView.findViewById(R.id.title);
-            descriptionItemView = itemView.findViewById(R.id.description);
+            etatsItemView = itemView.findViewById(R.id.etats);
             matiereItemView = itemView.findViewById(R.id.matiere);
             anneeItemView = itemView.findViewById(R.id.annee);
             bD = itemView.findViewById(R.id.delete_book);
@@ -57,10 +60,10 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.BookVi
         if (mbooks != null) {
             final Book current = mbooks.get(position);
             holder.titleItemView.setText(current.getTitle());
-            holder.descriptionItemView.setText(current.getDescription());
+            holder.etatsItemView.setText(current.getEtats());
             holder.matiereItemView.setText(current.getMatiere());
             holder.anneeItemView.setText(current.getAnnee());
-            /*holder.bD.setOnClickListener(new View.OnClickListener(){
+            holder.bD.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View view){
                     mContext.removeBook(current);
@@ -71,15 +74,16 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.BookVi
                 public void onClick(View view){
                     mContext.infosBook(current);
                 }
-            });*/
+            });
         } else {
             // Covers the case of data not being ready yet.
             holder.titleItemView.setText("Titre");
-            holder.descriptionItemView.setText("Description");
+            holder.etatsItemView.setText("Etats");
             holder.matiereItemView.setText("Matiere");
             holder.anneeItemView.setText("Annee");
         }
     }
+
 
     public void setBooks(List<Book> books){
         mbooks = books;

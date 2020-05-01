@@ -14,6 +14,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".NewBookActivity"></activity>
         <activity android:name=".ListeNewBookActivity"></activity>
+        <activity android:name=".MiseAJourBookActivity"></activity>
         <activity android:name=".PremierePageActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
