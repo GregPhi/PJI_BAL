@@ -23,22 +23,15 @@ public class QRCodeNetworkUtils {
             urlConnection = (HttpURLConnection) requestURL.openConnection();
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();
-            // Get the InputStream.
             InputStream inputStream = urlConnection.getInputStream();
-            // Create a buffered reader from that input stream.
             reader = new BufferedReader(new InputStreamReader(inputStream));
-            // Use a StringBuilder to hold the incoming response.
             StringBuilder builder = new StringBuilder();
             String line;
             while ((line = reader.readLine()) != null) {
                 builder.append(line);
-                // Since it's JSON, adding a newline isn't necessary (it won't
-                // affect parsing) but it does make debugging a *lot* easier
-                // if you print out the completed buffer for debugging.
                 builder.append("\n");
             }
             if (builder.length() == 0) {
-                // Stream was empty. No point in parsing.
                 return null;
             }
             connectJSONString = builder.toString();
@@ -56,7 +49,7 @@ public class QRCodeNetworkUtils {
                 }
             }
         }
-        Log.d(LOG_TAG, connectJSONString);
+        //Log.d(LOG_TAG, connectJSONString);
         return connectJSONString;
     }
 }

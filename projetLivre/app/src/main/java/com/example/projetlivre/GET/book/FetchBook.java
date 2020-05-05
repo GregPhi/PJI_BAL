@@ -51,30 +51,36 @@ public class FetchBook extends AsyncTask<String, Void, String> {
                 JSONObject book = ((JSONArray) itemsArray).getJSONObject(i);
                 JSONObject volumeInfo = book.getJSONObject("volumeInfo");
 
-                // Try to get the author and title from the current item,
-                // catch if either field is empty and move on.
-                try {
+                if(volumeInfo.has("title")){
                     title = volumeInfo.getString("title");
-                    edit = volumeInfo.getString("publisher");
-                    descipt = volumeInfo.getString("description");
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
-
+                if(volumeInfo.has("publisher")){
+                    edit = volumeInfo.getString("publisher");
+                }
+                if(volumeInfo.has("description")){
+                    descipt = volumeInfo.getString("description");
+                }
+                if(volumeInfo.has("subtitle")){
+                    descipt = volumeInfo.getString("subtitle");
+                }
                 // Move to the next item.
                 i++;
             }
 
             // If both are found, display the result.
-            if (title != null && edit != null && descipt != null) {
+            if (title != null) {
                 mTitleText.get().setText(title);
+            } else {
+                mTitleText.get().setText("NO RESULTS");
+            }
+            if (edit != null) {
                 mPubliText.get().setText(edit);
+            } else {
+                mPubliText.get().setText("NO RESULTS");
+            }
+            if (descipt != null) {
                 mDescriptText.get().setText(descipt);
             } else {
-                // If none are found, update the UI to
-                // show failed results.
-                mTitleText.get().setText("NO RESULTS");
-                mPubliText.get().setText("NO RESULTS");
                 mDescriptText.get().setText("NO RESULTS");
             }
 
@@ -87,4 +93,3 @@ public class FetchBook extends AsyncTask<String, Void, String> {
         }
     }
 }
-

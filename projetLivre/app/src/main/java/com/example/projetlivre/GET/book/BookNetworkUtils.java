@@ -67,7 +67,7 @@ public class BookNetworkUtils {
                 }
             }
         }
-        Log.d(LOG_TAG, bookJSONString);
+        //Log.d(LOG_TAG, bookJSONString);
         return bookJSONString;
     }
 }

@@ -15,10 +15,11 @@
         <activity android:name=".NewBookActivity"></activity>
         <activity android:name=".ListeNewBookActivity"></activity>
         <activity android:name=".MiseAJourBookActivity"></activity>
+        <activity android:name=".PretBookActivity"></activity>
+        <activity android:name=".RenduBookActivity"></activity>
         <activity android:name=".PremierePageActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

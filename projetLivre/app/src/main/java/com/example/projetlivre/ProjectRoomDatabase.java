@@ -9,12 +9,12 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import com.example.projetlivre.dao.BookDao;
-import com.example.projetlivre.object.Book;
+import com.example.projetlivre.dao.LivreDao;
+import com.example.projetlivre.object.Livre;
 
-@Database(entities = {Book.class},version = 2)
+@Database(entities = {Livre.class},version = 1)
 public abstract class ProjectRoomDatabase extends RoomDatabase {
-    public abstract BookDao bookDao();
+    public abstract LivreDao bookDao();
 
     private static volatile ProjectRoomDatabase INSTANCE;
 
@@ -46,7 +46,7 @@ public abstract class ProjectRoomDatabase extends RoomDatabase {
 
     private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
 
-        private final BookDao mDao;
+        private final LivreDao mDao;
 
         PopulateDbAsync(ProjectRoomDatabase db) {
             mDao = db.bookDao();
@@ -54,6 +54,7 @@ public abstract class ProjectRoomDatabase extends RoomDatabase {
 
         @Override
         protected Void doInBackground(final Void... params) {
+            mDao.deleteAll();
             return null;
         }
     }

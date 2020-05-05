@@ -6,67 +6,67 @@ import android.os.AsyncTask;
 import androidx.lifecycle.LiveData;
 
 import com.example.projetlivre.ProjectRoomDatabase;
-import com.example.projetlivre.dao.BookDao;
-import com.example.projetlivre.object.Book;
+import com.example.projetlivre.dao.LivreDao;
+import com.example.projetlivre.object.Livre;
 
 import java.util.List;
 
 public class BookRepository{
 
-    private BookDao mBookDao;
-    private LiveData<List<Book>> mAllBooks;
+    private LivreDao mLivreDao;
+    private LiveData<List<Livre>> mAllBooks;
 
     BookRepository(Application application) {
         ProjectRoomDatabase db = ProjectRoomDatabase.getDatabase(application);
-        mBookDao = db.bookDao();
-        mAllBooks = mBookDao.getmAllBooks();
+        mLivreDao = db.bookDao();
+        mAllBooks = mLivreDao.getmAllBooks();
     }
 
-    LiveData<List<Book>> getmAllBooks() {
+    LiveData<List<Livre>> getmAllBooks() {
         return mAllBooks;
     }
 
-    LiveData<List<Book>> getAllBookForAMatiere(String m){ return mBookDao.getAllBookForAMatiere(m); }
+    LiveData<List<Livre>> getAllBookForAMatiere(String m){ return mLivreDao.getAllBookForAMatiere(m); }
 
-    LiveData<List<Book>> findBookWithCodeBarre(String i) { return mBookDao.findBookWithCodeBarre(i); }
+    LiveData<List<Livre>> findBookWithCodeBarre(String i) { return mLivreDao.findBookWithCodeBarre(i); }
 
-    public void insert (Book book) {
-        new insertAsyncTask(mBookDao).execute(book);
+    public void insert (Livre book) {
+        new insertAsyncTask(mLivreDao).execute(book);
     }
 
-    public void delete (Book book) {
-        new deleteAsyncTask(mBookDao).execute(book);
+    public void delete (Livre book) {
+        new deleteAsyncTask(mLivreDao).execute(book);
     }
 
-    public void deleteAll(){ mBookDao.deleteAll(); }
+    public void deleteAll(){ mLivreDao.deleteAll(); }
 
-    public void updateBook(Book book){ mBookDao.updateBook(book);}
+    public void updateBook(Livre book){ mLivreDao.updateBook(book);}
 
-    private static class insertAsyncTask extends AsyncTask<Book, Void, Void> {
+    private static class insertAsyncTask extends AsyncTask<Livre, Void, Void> {
 
-        private BookDao mAsyncTaskDao;
+        private LivreDao mAsyncTaskDao;
 
-        insertAsyncTask(BookDao dao) {
+        insertAsyncTask(LivreDao dao) {
             mAsyncTaskDao = dao;
         }
 
         @Override
-        protected Void doInBackground(final Book... params) {
+        protected Void doInBackground(final Livre... params) {
             mAsyncTaskDao.insert(params[0]);
             return null;
         }
     }
 
-    private static class deleteAsyncTask extends AsyncTask<Book, Void, Void> {
+    private static class deleteAsyncTask extends AsyncTask<Livre, Void, Void> {
 
-        private BookDao mAsyncTaskDao;
+        private LivreDao mAsyncTaskDao;
 
-        deleteAsyncTask(BookDao dao) {
+        deleteAsyncTask(LivreDao dao) {
             mAsyncTaskDao = dao;
         }
 
         @Override
-        protected Void doInBackground(final Book... params) {
+        protected Void doInBackground(final Livre... params) {
             mAsyncTaskDao.delete(params[0]);
             return null;
         }

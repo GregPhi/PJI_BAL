@@ -3,10 +3,10 @@ package com.example.projetlivre.object;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public enum Etats implements Parcelable{
+public enum StatutsLivre implements Parcelable{
     // ATTRIBUTS
     /**/
-    TOPREPARE("A PREPARER"),READY("A PRETER"),LOANED("PRETE"),RETRUNED("RENDU");
+    APREPARER("A préparer"),PREPARE("Préparé"),EMPRUNTE("Emprunté"),RENDU("Rendu"),AUTRE("Autre");
     /**/
     private String type;
 
@@ -16,7 +16,7 @@ public enum Etats implements Parcelable{
      *
      * @param t
      */
-    Etats(String t){
+    StatutsLivre(String t){
         this.type = t;
     }
 
@@ -30,14 +30,16 @@ public enum Etats implements Parcelable{
         return this.type;
     }
 
+    public void setType(String t){ this.type = t;}
+
     // PARCELABLE
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
-        public Etats createFromParcel(Parcel in) {
-            return Etats.values()[in.readInt()];
+        public StatutsLivre createFromParcel(Parcel in) {
+            return StatutsLivre.values()[in.readInt()];
         }
 
-        public Etats[] newArray(int size) {
-            return new Etats[size];
+        public StatutsLivre[] newArray(int size) {
+            return new StatutsLivre[size];
         }
     };
 
