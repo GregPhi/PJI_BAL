@@ -1,5 +1,6 @@
 package com.example.projetlivre;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -7,6 +8,8 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -14,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.projetlivre.GET.qrCodeConnection.FetchConnection;
 import com.example.projetlivre.GET.qrCodeConnection.QRCodeLoader;
+import com.example.projetlivre.object.Constantes;
 import com.example.projetlivre.object.Livre;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -78,6 +82,39 @@ public class PremierePageActivity extends AppCompatActivity implements LoaderMan
 
     @Override
     public void onLoaderReset(@NonNull Loader<String> loader) {
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        switch (item.getItemId()){
+            case R.id.action_settings:
+                showDialog(Constantes.DIALOG_SETTINGS);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public Dialog onCreateDialog(int id){
+        Dialog box = null;
+        switch(id){
+            case Constantes.DIALOG_SETTINGS:
+                box = new Dialog(this);
+                box.setContentView(R.layout.dialog_settings);
+                box.setTitle("Utilisation");
+        }
+        return box;
     }
 
     @Override

@@ -16,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Scanner un code barres" />
+            android:text="@string/scanner_un_code_barres" />
 
         <EditText
             android:id="@+id/cdPret"
@@ -24,7 +24,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:ems="10"
-            android:hint="Code barres"
+            android:hint="@string/code_barre"
             android:inputType="textPersonName" />
     </LinearLayout>
 

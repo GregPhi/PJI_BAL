@@ -24,7 +24,7 @@
 
         <EditText
             android:id="@+id/numUser"
-            android:layout_width="wrap_content"
+            android:layout_width="284dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
@@ -126,7 +126,7 @@
             android:layout_width="201dp"
             android:layout_height="wrap_content"
             android:onClick="connection"
-            android:text="Connexion par Scan" />
+            android:text="@string/connexion_par_scan" />
     </LinearLayout>
 
 </LinearLayout>

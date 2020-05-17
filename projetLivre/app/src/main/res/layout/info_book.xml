@@ -76,68 +76,6 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/textView"
-            android:layout_width="49dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="Commentaires" />
-
-        <EditText
-            android:id="@+id/commentaire"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:hint="@string/comm"
-            android:inputType="textPersonName" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/textView12"
-            android:layout_width="122dp"
-            android:layout_height="match_parent"
-            android:text="Editeur" />
-
-        <EditText
-            android:id="@+id/editeur"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Editeur"
-            android:inputType="textPersonName" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="41dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/textView10"
-            android:layout_width="245dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="Etat du livre" />
-
-        <Spinner
-            android:id="@+id/etatLivre"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:entries="@array/etat_livre" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
             android:id="@+id/textView4"
             android:layout_width="49dp"
             android:layout_height="match_parent"
@@ -164,7 +102,7 @@
             android:layout_width="246dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Année" />
+            android:text="@string/annee" />
 
         <Spinner
             android:id="@+id/annee"
@@ -173,6 +111,88 @@
             android:layout_weight="1"
             android:entries="@array/annee" />
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/textView12"
+            android:layout_width="122dp"
+            android:layout_height="match_parent"
+            android:text="@string/editeur" />
+
+        <EditText
+            android:id="@+id/editeur"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/editeur"
+            android:inputType="textPersonName" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="41dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/et"
+            android:layout_width="245dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/etat_du_livre" />
+
+        <Spinner
+            android:id="@+id/etatLivre"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:entries="@array/etat_livre" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="49dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/commentaires" />
+
+        <EditText
+            android:id="@+id/commentaire"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="@string/commentaires"
+            android:inputType="textPersonName" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="43dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="246dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/statut_du_livre" />
+
+        <Spinner
+            android:id="@+id/statut"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:entries="@array/statut_livre" />
     </LinearLayout>
 
     <Space
@@ -189,7 +209,7 @@
             android:layout_width="192dp"
             android:layout_height="wrap_content"
             android:onClick="addBook"
-            android:text="Modifier le livre" />
+            android:text="@string/modifier_le_livre" />
 
         <Button
             android:id="@+id/retour"

@@ -126,7 +126,7 @@
             android:layout_width="372dp"
             android:layout_height="wrap_content"
             android:onClick="connection"
-            android:text="Connexion par Scan" />
+            android:text="@string/connexion_par_scan" />
     </LinearLayout>
 
 </LinearLayout>

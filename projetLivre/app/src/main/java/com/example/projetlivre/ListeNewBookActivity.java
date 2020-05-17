@@ -82,6 +82,22 @@ public class ListeNewBookActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        if(requestCode == Constantes.INFO_BOOK_ACTIVITY){
+            if(resultCode == RESULT_OK){
+                Livre l = intent.getParcelableExtra("livre");
+                mBookViewModel.updateBook(l);
+            }
+            if(resultCode == Constantes.RETOUR_ACTIVITY_REQUEST_CODE){}
+            if(resultCode == RESULT_CANCELED){
+                Toast error = Toast.makeText(getApplicationContext(), "Code barres oublié, modification pas prise en compte !", Toast.LENGTH_SHORT);
+                error.show();
+            }
+        }
+    }
+
     public void removeBook(Livre current){
         mBookViewModel.delete(current);
     }

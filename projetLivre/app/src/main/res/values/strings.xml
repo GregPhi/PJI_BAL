@@ -4,23 +4,22 @@
     <string name="supprimer">Supprimer</string>
     <string name="scan">Scan</string>
     <string name="recognition_text">Reconnaissance de texte</string>
-    <string name="code_barre">Code barre</string>
+    <string name="code_barre">Code barres</string>
     <string name="manuel">Manuel</string>
     <string name="informations_du_livre">Informations du livre</string>
     <string name="rechercher">Rechercher</string>
-    <string name="code_barre_multi">Code barre multi</string>
+    <string name="code_barre_multi">Code barres multi</string>
     <string name="reconnaissance_de_texte_multi">Reconnaissance de texte multi</string>
     <string name="titre">Titre</string>
     <string name="matiere">Matiere</string>
-    <string name="comm">Commentaires</string>
     <string name="isbn">ISBN</string>
-    <string name="cd_in">Merci d\'entrer un code barre</string>
+    <string name="cd_in">Merci d\'entrer un code barres</string>
 
     <string name="add_book_ok">Ajout du nouveau livre</string>
     <string name="add_book_fail">Ajout du nouveau livre impossible</string>
 
     <string name="info_book_ok"></string>
-    <string name="info_book_fail">Attention : vous avez enlevé le code barre.\n Modification non enregistrée.</string>
+    <string name="info_book_fail">Attention : vous avez enlevé le code barres.\n Modification non enregistrée.</string>
 
     <string name="retour">Retour</string>
     <string name="save">Enregistrer</string>
@@ -29,7 +28,15 @@
 
     <string name="nom">Nom</string>
     <string name="prenom">Prenom</string>
+    <string name="connexion_par_scan">Connexion par scan</string>
+    <string name="editeur">Editeur</string>
+    <string name="annee">Année</string>
+    <string name="etat_du_livre">Etat du livre</string>
+    <string name="commentaires">Commentaires</string>
+    <string name="ajout_du_livre">Ajout du livre</string>
+    <string name="v_rificattion_des_livres">Vérificattion des livres</string>
+    <string name="scanner_un_code_barres">Scanner un code barres</string>
+    <string name="statut_du_livre">Statut du livre</string>
+    <string name="modifier_le_livre">Modifier le livre</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -17,6 +17,7 @@
         <activity android:name=".MiseAJourBookActivity"></activity>
         <activity android:name=".PretBookActivity"></activity>
         <activity android:name=".RenduBookActivity"></activity>
+        <activity android:name=".InfoBookActivity"></activity>
         <activity android:name=".PremierePageActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
