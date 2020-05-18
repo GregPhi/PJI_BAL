@@ -15,6 +15,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HttpHeaderParser;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -48,13 +49,47 @@ public class JsonRequestActivity extends AppCompatActivity {
         get3 = findViewById(R.id.get3);
     }
 
-    public void getRequest(View view){
 
+    public void getRequest(View view){
+        RequestQueue queue = Volley.newRequestQueue(this);
+        final String url = "http://httpbin.org/get?param1=hello";
+        // prepare the Request
+        JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>()
+                {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        String obj1 = null;
+                        String obj2 = null;
+                        String obj3 = null;
+                        try {
+                            obj1 = response.getString("get1");
+                            obj2 = response.getString("get2");
+                            obj3 = response.getString("get3");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        get1.setText(obj1);
+                        get2.setText(obj2);
+                        get3.setText(obj3);
+                        // display response
+                        Log.d("Response", response.toString());
+                    }
+                },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("Error.Response", error.toString());
+                    }
+                }
+        );
+        // add it to the RequestQueue
+        queue.add(getRequest);
     }
 
     public void postRequest(View view){
         if(!TextUtils.isEmpty(obj1.getText().toString()) && !TextUtils.isEmpty(obj2.getText().toString()) && !TextUtils.isEmpty(obj3.getText().toString())){
-            // https://stackoverflow.com/questions/33573803/how-to-send-a-post-request-using-volley-with-string-body
             try {
                 RequestQueue requestQueue = Volley.newRequestQueue(this);
                 String URL = "http://...";
