@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
@@ -29,16 +30,29 @@ public class JsonRequestActivity extends AppCompatActivity {
     private EditText obj2;
     private EditText obj3;
 
+    private TextView get1;
+    private TextView get2;
+    private TextView get3;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.json_request);
+
         obj1 = findViewById(R.id.obj1);
         obj2 = findViewById(R.id.obj2);
         obj3 = findViewById(R.id.obj3);
+
+        get1 = findViewById(R.id.get1);
+        get2 = findViewById(R.id.get2);
+        get3 = findViewById(R.id.get3);
     }
 
-    public void sendRequest(View view){
+    public void getRequest(View view){
+
+    }
+
+    public void postRequest(View view){
         if(!TextUtils.isEmpty(obj1.getText().toString()) && !TextUtils.isEmpty(obj2.getText().toString()) && !TextUtils.isEmpty(obj3.getText().toString())){
             // https://stackoverflow.com/questions/33573803/how-to-send-a-post-request-using-volley-with-string-body
             try {

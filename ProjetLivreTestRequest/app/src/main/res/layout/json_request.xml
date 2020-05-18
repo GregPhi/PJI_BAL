@@ -68,14 +68,39 @@
 
     </LinearLayout>
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="170dp" />
-
     <Button
         android:id="@+id/testJson"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="sendRequest"
-        android:text="Test" />
+        android:onClick="postRequest"
+        android:text="POST" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="170dp" />
+
+    <TextView
+        android:id="@+id/get1"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/get2"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/get3"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:text="TextView" />
+
+    <Button
+        android:id="@+id/testJson2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="getRequest"
+        android:text="GET" />
 </LinearLayout>
