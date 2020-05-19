@@ -116,7 +116,7 @@
 
                     <TextView
                         android:id="@+id/textView12"
-                        android:layout_width="122dp"
+                        android:layout_width="283dp"
                         android:layout_height="match_parent"
                         android:text="@string/editeur" />
 
@@ -158,7 +158,7 @@
 
                     <TextView
                         android:id="@+id/textView5"
-                        android:layout_width="246dp"
+                        android:layout_width="567dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:text="@string/annee" />
@@ -179,7 +179,7 @@
 
                     <TextView
                         android:id="@+id/et"
-                        android:layout_width="245dp"
+                        android:layout_width="566dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:text="@string/etat_du_livre" />

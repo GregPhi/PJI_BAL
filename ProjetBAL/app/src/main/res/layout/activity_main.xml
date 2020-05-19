@@ -52,9 +52,10 @@
         android:layout_height="129dp" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/newBook"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:onClick="newBookActivity"
         android:text="@string/cr_ation_de_nouveaux_livres" />
 
 

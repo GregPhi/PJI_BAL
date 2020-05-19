@@ -111,4 +111,9 @@ public class MainActivity extends AppCompatActivity {
         IntentIntegrator scanIntegrator = new IntentIntegrator(this);
         scanIntegrator.initiateScan();
     }
+
+    public void newBookActivity(View view){
+        Intent intent = new Intent(MainActivity.this,ListNewBookActivity.class);
+        startActivity(intent);
+    }
 }

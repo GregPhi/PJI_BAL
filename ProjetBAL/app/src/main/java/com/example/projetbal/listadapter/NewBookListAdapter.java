@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.projetbal.NewBookActivity;
+import com.example.projetbal.ListNewBookActivity;
 import com.example.projetbal.R;
 import com.example.projetbal.object.Livre;
 
@@ -42,11 +42,11 @@ public class NewBookListAdapter extends RecyclerView.Adapter<NewBookListAdapter.
         }
     }
 
-    protected final NewBookActivity mContext;
+    protected final ListNewBookActivity mContext;
     protected final LayoutInflater mInflater;
     protected List<Livre> mbooks; // Cached copy of words
 
-    public NewBookListAdapter(NewBookActivity context) {
+    public NewBookListAdapter(ListNewBookActivity context) {
         mInflater = LayoutInflater.from(context);
         mContext = context;
     }

@@ -52,7 +52,7 @@ public class JsonRequestActivity extends AppCompatActivity {
 
     public void getRequest(View view){
         RequestQueue queue = Volley.newRequestQueue(this);
-        final String url = "http://httpbin.org/get?param1=hello";
+        final String url = "";
         // prepare the Request
         JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>()
@@ -92,7 +92,7 @@ public class JsonRequestActivity extends AppCompatActivity {
         if(!TextUtils.isEmpty(obj1.getText().toString()) && !TextUtils.isEmpty(obj2.getText().toString()) && !TextUtils.isEmpty(obj3.getText().toString())){
             try {
                 RequestQueue requestQueue = Volley.newRequestQueue(this);
-                String URL = "http://...";
+                String URL = "";
                 JSONObject jsonBody = new JSONObject();
                 jsonBody.put("obj1", obj1.getText().toString());
                 jsonBody.put("obj1", obj2.getText().toString());
