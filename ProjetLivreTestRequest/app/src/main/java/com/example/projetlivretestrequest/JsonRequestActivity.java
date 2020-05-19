@@ -135,7 +135,6 @@ public class JsonRequestActivity extends AppCompatActivity {
                         return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
                     }
                 };
-
                 requestQueue.add(stringRequest);
             } catch (JSONException e) {
                 e.printStackTrace();
