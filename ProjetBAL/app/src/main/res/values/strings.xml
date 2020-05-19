@@ -1,0 +1,46 @@
+<resources>
+    <string name="app_name">ProjetBAL</string>
+    <string name="action_settings">Settings</string>
+    <string name="nom_d_utilisateur">Nom d\'utilisateur</string>
+    <string name="connexion">Connexion</string>
+    <string name="scanner_qr_code_de_connexion">Scanner QR Code de Connexion</string>
+    <string name="cr_ation_de_nouveaux_livres">Création de nouveaux livres</string>
+    <string name="infos">Infos</string>
+    <string name="supprimer">Supprimer</string>
+    <string name="scan">Scan</string>
+    <string name="recognition_text">Reconnaissance de texte</string>
+    <string name="code_barre">Code barres</string>
+    <string name="manuel">Manuel</string>
+    <string name="informations_du_livre">Informations du livre</string>
+    <string name="rechercher">Rechercher</string>
+    <string name="code_barre_multi">Code barres multi</string>
+    <string name="reconnaissance_de_texte_multi">Reconnaissance de texte multi</string>
+    <string name="titre">Titre</string>
+    <string name="matiere">Matiere</string>
+    <string name="isbn">ISBN</string>
+    <string name="cd_in">Merci d\'entrer un code barres</string>
+
+    <string name="add_book_ok">Ajout du nouveau livre</string>
+    <string name="add_book_fail">Ajout du nouveau livre impossible</string>
+
+    <string name="info_book_ok"></string>
+    <string name="info_book_fail">Attention : vous avez enlevé le code barres.\n Modification non enregistrée.</string>
+
+    <string name="retour">Retour</string>
+    <string name="save">Enregistrer</string>
+    <string name="validation">Validation</string>
+    <string name="utilisateur">Utilisateur</string>
+
+    <string name="nom">Nom</string>
+    <string name="prenom">Prenom</string>
+    <string name="connexion_par_scan">Connexion par scan</string>
+    <string name="editeur">Editeur</string>
+    <string name="annee">Année</string>
+    <string name="etat_du_livre">Etat du livre</string>
+    <string name="commentaires">Commentaires</string>
+    <string name="ajout_du_livre">Ajout du livre</string>
+    <string name="v_rificattion_des_livres">Vérificattion des livres</string>
+    <string name="scanner_un_code_barres">Scanner un code barres</string>
+    <string name="statut_du_livre">Statut du livre</string>
+    <string name="modifier_le_livre">Modifier le livre</string>
+</resources>
