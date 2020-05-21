@@ -4,7 +4,9 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 import com.example.projetbal.dao.LivreDao;
+import com.example.projetbal.object.EtatsLivre;
 import com.example.projetbal.object.Livre;
+import com.example.projetbal.object.StatutsLivre;
 
 import androidx.annotation.NonNull;
 import androidx.room.Database;
@@ -55,6 +57,18 @@ public abstract class ProjectRoomDatabase extends RoomDatabase {
         @Override
         protected Void doInBackground(final Void... params) {
             mDao.deleteAll();
+            Livre livre1 = new Livre();
+            livre1.setCode_barre("9782013235327");
+            livre1.setTitle("Hobbit");
+            livre1.setEtats(EtatsLivre.NEUF.toString());
+            livre1.setStatuts(StatutsLivre.PREPARE.toString());
+            Livre livre2 = new Livre();
+            livre2.setCode_barre("9782290019436");
+            livre2.setTitle("GOT");
+            livre2.setEtats(EtatsLivre.BONETAT.toString());
+            livre2.setStatuts(StatutsLivre.PREPARE.toString());
+            mDao.insert(livre1);
+            mDao.insert(livre2);
             return null;
         }
     }

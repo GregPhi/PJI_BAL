@@ -26,10 +26,10 @@
 
     <include
         layout="@layout/content_pret_rendubook"
-        android:layout_width="415dp"
-        android:layout_height="676dp"
-        tools:layout_editor_absoluteX="-3dp"
-        tools:layout_editor_absoluteY="55dp" />
+        android:layout_width="734dp"
+        android:layout_height="363dp"
+        tools:layout_editor_absoluteX="-2dp"
+        tools:layout_editor_absoluteY="48dp" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/scanQRPretRendu"

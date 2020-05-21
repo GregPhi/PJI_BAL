@@ -1,4 +1,4 @@
-package com.example.projetbal.dataB;
+package com.example.projetbal.dataB.book;
 
 import android.app.Application;
 import android.os.AsyncTask;
@@ -26,9 +26,13 @@ public class BookRepository{
         return mAllBooks;
     }
 
+    List<Livre> getmAllBooksForJson(){ return mLivreDao.getmAllBooksForJson(); }
+
     LiveData<List<Livre>> getAllBookForAMatiere(String m){ return mLivreDao.getAllBookForAMatiere(m); }
 
     LiveData<List<Livre>> findBookWithCodeBarre(String i) { return mLivreDao.findBookWithCodeBarre(i); }
+
+    List<Livre> findBookWithCodeBarreList(String c) { return mLivreDao.findBookWithCodeBarreList(c); }
 
     public void insert (Livre book) {
         new insertAsyncTask(mLivreDao).execute(book);

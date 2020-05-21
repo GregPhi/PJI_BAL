@@ -29,9 +29,15 @@ public interface LivreDao {
     @Query("SELECT * FROM book_table ORDER BY title ASC")
     LiveData<List<Livre>> getmAllBooks();
 
+    @Query("SELECT * FROM book_table ORDER BY title ASC")
+    List<Livre> getmAllBooksForJson();
+
     @Query("SELECT * FROM book_table WHERE matiere =:m")
     LiveData<List<Livre>> getAllBookForAMatiere(String m);
 
     @Query("SELECT * FROM book_table WHERE id =:i")
     LiveData<List<Livre>> findBookWithCodeBarre(String i);
+
+    @Query("SELECT * FROM book_table WHERE code_barre =:c")
+    List<Livre> findBookWithCodeBarreList(String c);
 }

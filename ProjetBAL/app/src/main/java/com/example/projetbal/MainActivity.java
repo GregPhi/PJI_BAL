@@ -7,14 +7,16 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 
 import com.example.projetbal.GET.qrCodeConnection.FetchConnection;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
+import com.example.projetbal.dataB.book.BookViewModel;
+import com.example.projetbal.object.Livre;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProviders;
 
+import android.os.Parcelable;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.Menu;
@@ -22,12 +24,14 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static BookViewModel mBookViewModel;
     private static String urlConnection = "";
-    private EditText user;
+    private EditText userEdit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +39,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        user = findViewById(R.id.userMain);
+        userEdit = findViewById(R.id.userMain);
+
+        mBookViewModel = ViewModelProviders.of(this).get(BookViewModel.class);
     }
 
     @Override
@@ -100,10 +106,61 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void connectWithUser(View view){
-        if(TextUtils.isEmpty(user.getText().toString())){
+        if(TextUtils.isEmpty(userEdit.getText().toString())){
             Toast.makeText(getApplicationContext(), "Merci d'indiquer un nom d'utilisateur", Toast.LENGTH_LONG).show();
         }else{
-
+            String user = userEdit.getText().toString();
+            final String[] methode = {"test"};
+            //final List<Livre> livres = new ArrayList<Livre>();
+            final List<Livre> livres = mBookViewModel.getmAllBooksForJson();
+            /*RequestQueue queue = Volley.newRequestQueue(this);
+            final String url = ""+user;
+            // prepare the Request
+            JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                    new Response.Listener<JSONObject>()
+                    {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            try {
+                                methode[0] = response.getString("methode");
+                                int cpt = 0;
+                                JSONArray array = response.getJSONArray("livres");
+                                while(cpt < array.length()){
+                                    JSONObject obj = array.getJSONObject(cpt);
+                                    Livre livre = new Livre();
+                                    livre.setCode_barre(obj.getString("code barre"));
+                                    livre.setTitle(obj.getString("titre"));
+                                    livre.setMatiere(obj.getString("matiere"));
+                                    livre.setDescription(obj.getString("infos"));
+                                    livre.setAnnee(obj.getString("annee"));
+                                    livre.setEditeur(obj.getString("editeur"));
+                                    livre.setEtats(obj.getString("etat du livre"));
+                                    livre.setCommenataires(obj.getString("commentaire"));
+                                    livre.setStatuts(obj.getString("statut"));
+                                    livres.add(livre);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            // display response
+                            Log.d("Response", response.toString());
+                        }
+                    },
+                    new Response.ErrorListener()
+                    {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.d("Error.Response", error.toString());
+                        }
+                    }
+            );
+            // add it to the RequestQueue
+            queue.add(getRequest);*/
+            Intent intent = new Intent(MainActivity.this,PretRenduBookActivity.class);
+            intent.putExtra("user", user);
+            intent.putExtra("methode", methode[0]);
+            intent.putParcelableArrayListExtra("livres", (ArrayList<? extends Parcelable>) livres);
+            startActivity(intent);
         }
     }
 

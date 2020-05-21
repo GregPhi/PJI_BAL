@@ -35,36 +35,22 @@ public class FetchBook extends AsyncTask<String, Void, String> {
             // Convert the response into a JSON object.
             JSONObject jsonObject = new JSONObject(s);
             // Get the JSONArray of book items.
-            JSONArray itemsArray = jsonObject.getJSONArray("items");
+            JSONObject volumeInfo = jsonObject.getJSONObject("volumeInfo");
 
-            // Initialize iterator and results fields.
-            int i = 0;
             String title = null;
             String edit = null;
             String descipt = null;
-
-            // Look for results in the items array, exiting
-            // when both the title and author
-            // are found or when all items have been checked.
-            while (i < itemsArray.length() && (descipt == null && edit == null && title == null)) {
-                // Get the current item information.
-                JSONObject book = ((JSONArray) itemsArray).getJSONObject(i);
-                JSONObject volumeInfo = book.getJSONObject("volumeInfo");
-
-                if(volumeInfo.has("title")){
-                    title = volumeInfo.getString("title");
-                }
-                if(volumeInfo.has("publisher")){
-                    edit = volumeInfo.getString("publisher");
-                }
-                if(volumeInfo.has("description")){
-                    descipt = volumeInfo.getString("description");
-                }
-                if(volumeInfo.has("subtitle")){
-                    descipt = volumeInfo.getString("subtitle");
-                }
-                // Move to the next item.
-                i++;
+            if(volumeInfo.has("title")){
+                title = volumeInfo.getString("title");
+            }
+            if(volumeInfo.has("publisher")){
+                edit = volumeInfo.getString("publisher");
+            }
+            if(volumeInfo.has("description")){
+                descipt = volumeInfo.getString("description");
+            }
+            if(volumeInfo.has("subtitle")){
+                descipt = volumeInfo.getString("subtitle");
             }
 
             // If both are found, display the result.

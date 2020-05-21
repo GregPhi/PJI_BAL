@@ -1,4 +1,4 @@
-package com.example.projetbal.dataB;
+package com.example.projetbal.dataB.book;
 
 import android.app.Application;
 
@@ -22,9 +22,13 @@ public class BookViewModel extends AndroidViewModel {
 
     public LiveData<List<Livre>> getmAllBooks() { return mAllBooks; }
 
+    public List<Livre> getmAllBooksForJson(){ return mRepository.getmAllBooksForJson(); }
+
     public LiveData<List<Livre>> getAllBookForAMatiere(String m){ return mRepository.getAllBookForAMatiere(m); }
 
     public LiveData<List<Livre>> findBookWithCodeBarre(String i){ return mRepository.findBookWithCodeBarre(i); }
+
+    public List<Livre> findBookWithCodeBarreList(String c){ return mRepository.findBookWithCodeBarreList(c); }
 
     public void insert(Livre book) { mRepository.insert(book); }
 
