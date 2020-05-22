@@ -2,6 +2,9 @@ package com.example.projetbal.dao;
 
 import com.example.projetbal.object.FoundLivre;
 
+import java.util.List;
+
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -15,11 +18,17 @@ public interface FoundLivreDao {
     void insert(FoundLivre foundLivre);
 
     @Update
-    void updateBook(FoundLivre... foundLivres);
+    void updateFoundBook(FoundLivre... foundLivres);
 
     @Delete
     void delete(FoundLivre foundLivre);
 
-    @Query("DELETE FROM book_table")
+    @Query("DELETE FROM foundbook_table")
     void deleteAll();
+
+    @Query("SELECT * FROM foundbook_table")
+    LiveData<List<FoundLivre>> getmAllFoundBooks();
+
+    @Query("SELECT * FROM foundbook_table")
+    List<FoundLivre> getmAllFoundBooksList();
 }

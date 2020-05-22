@@ -1,6 +1,6 @@
 package com.example.projetbal.dao;
 
-import com.example.projetbal.object.Livre;
+import com.example.projetbal.object.book.Livre;
 
 import java.util.List;
 
