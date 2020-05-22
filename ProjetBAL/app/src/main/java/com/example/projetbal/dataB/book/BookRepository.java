@@ -5,7 +5,7 @@ import android.os.AsyncTask;
 
 import com.example.projetbal.ProjectRoomDatabase;
 import com.example.projetbal.dao.LivreDao;
-import com.example.projetbal.object.Livre;
+import com.example.projetbal.object.book.Livre;
 
 import java.util.List;
 
