@@ -6,9 +6,17 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.projetbal.GET.qrCodeConnection.FetchConnection;
 import com.example.projetbal.dataB.book.BookViewModel;
-import com.example.projetbal.object.Livre;
+import com.example.projetbal.dataB.found.FoundBookViewModel;
+import com.example.projetbal.object.FoundLivre;
+import com.example.projetbal.object.book.Livre;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -18,11 +26,16 @@ import androidx.lifecycle.ViewModelProviders;
 
 import android.os.Parcelable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +43,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     public static BookViewModel mBookViewModel;
+    public static FoundBookViewModel mFoundBookViewModel;
     private static String urlConnection = "";
     private EditText userEdit;
 
@@ -42,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
         userEdit = findViewById(R.id.userMain);
 
         mBookViewModel = ViewModelProviders.of(this).get(BookViewModel.class);
+        mFoundBookViewModel = ViewModelProviders.of(this).get(FoundBookViewModel.class);
     }
 
     @Override
@@ -111,8 +126,6 @@ public class MainActivity extends AppCompatActivity {
         }else{
             String user = userEdit.getText().toString();
             final String[] methode = {"test"};
-            //final List<Livre> livres = new ArrayList<Livre>();
-            final List<Livre> livres = mBookViewModel.getmAllBooksForJson();
             /*RequestQueue queue = Volley.newRequestQueue(this);
             final String url = ""+user;
             // prepare the Request
@@ -137,7 +150,8 @@ public class MainActivity extends AppCompatActivity {
                                     livre.setEtats(obj.getString("etat du livre"));
                                     livre.setCommenataires(obj.getString("commentaire"));
                                     livre.setStatuts(obj.getString("statut"));
-                                    livres.add(livre);
+                                    mBookViewModel.insert(livre);
+                                    mFoundBookViewModel.insert(new FoundLivre(livre.getCode_barre()));
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -159,7 +173,6 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this,PretRenduBookActivity.class);
             intent.putExtra("user", user);
             intent.putExtra("methode", methode[0]);
-            intent.putParcelableArrayListExtra("livres", (ArrayList<? extends Parcelable>) livres);
             startActivity(intent);
         }
     }
