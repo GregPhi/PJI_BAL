@@ -1,4 +1,4 @@
-package com.example.projetbal.object;
+package com.example.projetbal.object.book;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -10,26 +10,26 @@ public enum StatutsLivre implements Parcelable {
     /**/
     private String type;
 
-    // CONSTRUCTOR
-
-    /**
-     *
-     * @param t
-     */
     StatutsLivre(String t){
         this.type = t;
     }
 
-    // GETTER
+    public static String getNextStatut(String type){
+        switch (type){
+            case "A préparer":
+                return PREPARE.getType();
+            case "Préparé":
+                return EMPRUNTE.getType();
+            case "Emprunté":
+                return RENDU.getType();
+            default:
+                return AUTRE.getType();
+        }
+    }
 
-    /**
-     *
-     * @return
-     */
     public String getType(){
         return this.type;
     }
-
     public void setType(String t){ this.type = t;}
 
     // PARCELABLE

@@ -1,4 +1,4 @@
-package com.example.projetbal.object;
+package com.example.projetbal.object.book;
 
 import android.os.Parcel;
 import android.os.Parcelable;

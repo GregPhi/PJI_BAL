@@ -1,4 +1,4 @@
-package com.example.projetbal.object;
+package com.example.projetbal.object.book;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -158,7 +158,7 @@ public class Livre implements Parcelable {
     public String getEditeur(){ return this.editeur; }
 
     public String toString(){
-        return "Code Barres :"+this.code_barre+"\n Titre : "+this.title+"\n Matiere : "+this.matiere;
+        return "Code Barres : "+this.code_barre+"\n Titre : "+this.title+"\n Matiere : "+this.matiere;
     }
 
     @Override
