@@ -1,6 +1,5 @@
 package com.example.projetbal.listadapter;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +8,7 @@ import android.widget.TextView;
 
 import com.example.projetbal.ListNewBookActivity;
 import com.example.projetbal.R;
-import com.example.projetbal.object.Livre;
+import com.example.projetbal.object.book.Livre;
 
 import java.util.List;
 

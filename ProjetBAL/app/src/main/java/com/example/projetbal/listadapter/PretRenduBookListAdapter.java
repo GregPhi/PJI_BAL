@@ -10,7 +10,7 @@ import android.widget.TextView;
 import com.example.projetbal.PretRenduBookActivity;
 import com.example.projetbal.R;
 import com.example.projetbal.object.FoundLivre;
-import com.example.projetbal.object.Livre;
+import com.example.projetbal.object.book.Livre;
 
 import java.util.List;
 
@@ -44,7 +44,7 @@ public class PretRenduBookListAdapter extends RecyclerView.Adapter<PretRenduBook
 
     protected final PretRenduBookActivity mContext;
     protected final LayoutInflater mInflater;
-    protected List<FoundLivre> mbooks; // Cached copy of words
+    protected List<FoundLivre> mfoundbooks; // Cached copy of words
 
     public PretRenduBookListAdapter(PretRenduBookActivity context) {
         mInflater = LayoutInflater.from(context);
@@ -59,19 +59,20 @@ public class PretRenduBookListAdapter extends RecyclerView.Adapter<PretRenduBook
 
     @Override
     public void onBindViewHolder(BookViewHolder holder, int position) {
-        if (mbooks != null) {
-            final FoundLivre current = mbooks.get(position);
-            holder.titleItemView.setText(current.getLivre().getTitle());
-            holder.etatsItemView.setText(current.getLivre().getEtats());
-            holder.matiereItemView.setText(current.getLivre().getMatiere());
-            holder.anneeItemView.setText(current.getLivre().getAnnee());
-            holder.cdItemView.setText(current.getLivre().getCode_barre());
-            holder.commItemView.setText(current.getLivre().getCommenataires());
-            holder.statutItemView.setImageResource((current.getFound() ? R.drawable.ic_check_green_24dp : R.drawable.ic_not_check_red_24dp));
+        if (mfoundbooks != null) {
+            final FoundLivre currentfound = mfoundbooks.get(position);
+            final Livre book = currentfound.getLivre();
+            holder.titleItemView.setText(book.getTitle());
+            holder.etatsItemView.setText(book.getEtats());
+            holder.matiereItemView.setText(book.getMatiere());
+            holder.anneeItemView.setText(book.getAnnee());
+            holder.cdItemView.setText(book.getCode_barre());
+            holder.commItemView.setText(book.getCommenataires());
+            holder.statutItemView.setImageResource((currentfound.getFound() ? R.drawable.ic_check_green_24dp : R.drawable.ic_not_check_red_24dp));
             holder.bI.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View view){
-                    mContext.infosBook(current.getLivre());
+                    mContext.infosBook(book);
                 }
             });
         } else {
@@ -85,9 +86,8 @@ public class PretRenduBookListAdapter extends RecyclerView.Adapter<PretRenduBook
         }
     }
 
-
-    public void setBooks(List<FoundLivre> books){
-        mbooks = books;
+    public void setFoundBooks(List<FoundLivre> books){
+        mfoundbooks = books;
         notifyDataSetChanged();
     }
 
@@ -95,6 +95,6 @@ public class PretRenduBookListAdapter extends RecyclerView.Adapter<PretRenduBook
     // mWords has not been updated (means initially, it's null, and we can't return null).
     @Override
     public int getItemCount() {
-        return (mbooks != null) ? mbooks.size(): 0;
+        return (mfoundbooks != null) ? mfoundbooks.size(): 0;
     }
 }
