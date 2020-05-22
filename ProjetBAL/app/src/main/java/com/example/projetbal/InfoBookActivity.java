@@ -9,7 +9,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.example.projetbal.object.Constantes;
-import com.example.projetbal.object.Livre;
+import com.example.projetbal.object.book.Livre;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -70,7 +70,7 @@ public class InfoBookActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent replyIntent = new Intent();
                 if(TextUtils.isEmpty(cdBEdit.getText().toString())){
-                    setResult(RESULT_CANCELED, replyIntent);
+                    setResult(Constantes.INFO_BOOK_FAIL, replyIntent);
                 } else {
                     if(!TextUtils.isEmpty(cdBEdit.getText())){
                         current.setCode_barre(cdBEdit.getText().toString());
