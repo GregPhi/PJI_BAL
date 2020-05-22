@@ -14,8 +14,8 @@ import android.widget.Toast;
 import com.example.projetbal.GET.book.BookLoader;
 import com.example.projetbal.GET.book.FetchBook;
 import com.example.projetbal.dataB.book.BookViewModel;
-import com.example.projetbal.object.Livre;
-import com.example.projetbal.object.StatutsLivre;
+import com.example.projetbal.object.book.Livre;
+import com.example.projetbal.object.book.StatutsLivre;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -29,7 +29,6 @@ import androidx.loader.content.Loader;
 public class NewBookActivity extends AppCompatActivity implements View.OnClickListener, LoaderManager.LoaderCallbacks<String> {
     public static BookViewModel mBookViewModel;
     private Livre newBook = null;
-    //private List<Livre> newBooks = new ArrayList<Livre>();
 
     private EditText mEditISBNView;
 
