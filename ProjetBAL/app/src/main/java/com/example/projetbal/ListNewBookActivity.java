@@ -19,7 +19,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.projetbal.dataB.book.BookViewModel;
 import com.example.projetbal.listadapter.NewBookListAdapter;
 import com.example.projetbal.object.Constantes;
-import com.example.projetbal.object.Livre;
+import com.example.projetbal.object.book.Livre;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONException;
@@ -143,9 +143,9 @@ public class ListNewBookActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, intent);
         if(requestCode == Constantes.INFO_BOOK_OK){
             Livre book = intent.getParcelableExtra("livre");
-            mBookViewModel.updateBook(book);
+            mBookViewModel.insert(book);
         }
-        if(requestCode == RESULT_CANCELED){
+        if(requestCode == Constantes.INFO_BOOK_FAIL){
             Toast.makeText(getApplicationContext(), "Merci d'indiquer un code barre", Toast.LENGTH_LONG).show();
         }
     }
@@ -157,6 +157,7 @@ public class ListNewBookActivity extends AppCompatActivity {
     public void infosBook(Livre current){
         Intent intent = new Intent( ListNewBookActivity.this, InfoBookActivity.class);
         intent.putExtra("livre",current);
+        mBookViewModel.delete(current);
         startActivityForResult(intent, Constantes.INFO_BOOK_ACTIVITY);
     }
 }
