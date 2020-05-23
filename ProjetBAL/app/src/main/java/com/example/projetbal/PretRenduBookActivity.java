@@ -1,7 +1,10 @@
 package com.example.projetbal;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,12 +20,12 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.projetbal.dataB.book.BookViewModel;
+import com.example.projetbal.POST.SendBookList;
 import com.example.projetbal.dataB.found.FoundBookViewModel;
 import com.example.projetbal.listadapter.PretRenduBookListAdapter;
 import com.example.projetbal.object.FoundLivre;
 import com.example.projetbal.object.book.Livre;
-import com.example.projetbal.object.book.StatutsLivre;
+import com.example.projetbal.object.book.enumO.StatutsLivre;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -31,7 +34,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.Nullable;
@@ -78,14 +80,48 @@ public class PretRenduBookActivity extends AppCompatActivity {
         sendPretRendu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                for(FoundLivre l : mFoundBookViewModel.getmAllFoundBooksList()){
-                    if(l.getFound()){
-                        Livre livre = l.getLivre();
-                        String statut = StatutsLivre.getNextStatut(livre.getStatuts());
-                        livre.setStatuts(statut);
-                        l.setLivre(livre);
-                        mFoundBookViewModel.insert(l);
+                ConnectivityManager connMgr = (ConnectivityManager)
+                        getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo networkInfo = null;
+                if (connMgr != null) {
+                    networkInfo = connMgr.getActiveNetworkInfo();
+                }
+                if (networkInfo != null && networkInfo.isConnected()) {
+                    for(FoundLivre l : mFoundBookViewModel.getmAllFoundBooksList()){
+                        if(l.getFound()){
+                            Livre livre = l.getLivre();
+                            String statut = StatutsLivre.getNextStatut(livre.getStatuts());
+                            livre.setStatuts(statut);
+                            l.setLivre(livre);
+                            mFoundBookViewModel.insert(l);
+                        }
                     }
+                    List<Livre> books = null;// mBookViewModel.getmAllBooksForJson();
+                    JSONObject json = new JSONObject();
+                    int cpt = 0;
+                    while(cpt < books.size()){
+                        JSONObject object = new JSONObject();
+                        try {
+                            object.put("code_barre",books.get(cpt).getCode_barre());
+                            object.put("titre",books.get(cpt).getTitle());
+                            object.put("matiere",books.get(cpt).getMatiere());
+                            object.put("infos",books.get(cpt).getDescription());
+                            object.put("annee",books.get(cpt).getAnnee());
+                            object.put("editeur",books.get(cpt).getEditeur());
+                            object.put("etat",books.get(cpt).getEtats());
+                            object.put("commentaire",books.get(cpt).getCommenataires());
+                            object.put("statut",books.get(cpt).getStatuts());
+                            json.put(String.valueOf(cpt),object);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        cpt++;
+                    }
+                    SendBookList send = new SendBookList("",json);
+                    send.sendRequest();
+                } else {
+                    Toast net = Toast.makeText(getApplicationContext(), "NO NETWORK !", Toast.LENGTH_SHORT);
+                    net.show();
                 }
             }
         });

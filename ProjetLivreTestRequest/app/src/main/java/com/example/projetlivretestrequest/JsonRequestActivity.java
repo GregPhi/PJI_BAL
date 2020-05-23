@@ -1,5 +1,7 @@
 package com.example.projetlivretestrequest;
 
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -22,7 +24,16 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.ProtocolException;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -52,54 +63,77 @@ public class JsonRequestActivity extends AppCompatActivity {
 
     public void getRequest(View view){
         RequestQueue queue = Volley.newRequestQueue(this);
-        final String url = "";
+        final String url = "http://localhost:8080/livre/JSON";
         // prepare the Request
-        JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONObject>()
-                {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
                     @Override
-                    public void onResponse(JSONObject response) {
-                        String obj1 = null;
-                        String obj2 = null;
-                        String obj3 = null;
-                        try {
-                            obj1 = response.getString("get1");
-                            obj2 = response.getString("get2");
-                            obj3 = response.getString("get3");
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        get1.setText(obj1);
-                        get2.setText(obj2);
-                        get3.setText(obj3);
-                        // display response
-                        Log.d("Response", response.toString());
+                    public void onResponse(String response) {
+                        // Display the first 500 characters of the response string.
+                        get1.setText("Response is: "+ response.substring(0,500));
                     }
-                },
-                new Response.ErrorListener()
-                {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("Error.Response", error.toString());
-                    }
-                }
-        );
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                get1.setText("That didn't work!");
+            }
+        });
+
         // add it to the RequestQueue
-        queue.add(getRequest);
+        queue.add(stringRequest);
     }
 
-    public void postRequest(View view){
-        if(!TextUtils.isEmpty(obj1.getText().toString()) && !TextUtils.isEmpty(obj2.getText().toString()) && !TextUtils.isEmpty(obj3.getText().toString())){
-            try {
+    public void postRequest(View view) throws IOException {
+        System.setProperty("http.keepAlive", "false");
+        if(!TextUtils.isEmpty(obj1.getText().toString())){
+            ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+            NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+
+            if(networkInfo != null && networkInfo.isAvailable() && networkInfo.isConnected()) {
+                boolean wifi = networkInfo.getType() == ConnectivityManager.TYPE_WIFI;
+                Log.d("NetworkState", "L'interface de connexion active est du Wifi : " + wifi);
+                HttpCall httpCallPost = new HttpCall();
+                httpCallPost.setMethodtype(HttpCall.POST);
+                httpCallPost.setUrl("http://192.168.1.41:8080/test");
+                //HashMap<String,String> paramsPost = new HashMap<>();
+                //paramsPost.put("name","Julius Cesar");
+                httpCallPost.setParams(obj1.getText().toString());
+                new HttpRequest(){
+                    @Override
+                    public void onResponse(String response) {
+                        super.onResponse(response);
+                        obj2.setText(obj2.getText()+"\nPost:"+response);
+                    }
+                }.execute(httpCallPost);
+                /*URL obj = new URL("http://localhost:8080/test");
+                HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+                con.setRequestMethod("POST");
+                // For POST only - START
+                con.setDoOutput(true);
+                OutputStream os = con.getOutputStream();
+                os.write(obj1.getText().toString().getBytes());
+                os.flush();
+                os.close();
+                // For POST only - END
+
+                int responseCode = con.getResponseCode();
+                System.out.println("POST Response Code :: " + responseCode);
+
+                if (responseCode != HttpURLConnection.HTTP_OK) { //success
+                    System.out.println("POST request not worked");
+                }*/
+            }
+
+            /*try {
                 RequestQueue requestQueue = Volley.newRequestQueue(this);
-                String URL = "";
+                final String url = "http://127.0.0.1:8080/test";
                 JSONObject jsonBody = new JSONObject();
                 jsonBody.put("obj1", obj1.getText().toString());
                 jsonBody.put("obj1", obj2.getText().toString());
                 jsonBody.put("obj1", obj3.getText().toString());
                 final String requestBody = jsonBody.toString();
 
-                StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+                StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         Log.i("VOLLEY", response);
@@ -134,11 +168,19 @@ public class JsonRequestActivity extends AppCompatActivity {
                         }
                         return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
                     }
+
+                    @Override
+                    public Map<String, String> getParams() {
+                        Map<String, String> mParams = new HashMap<String, String>();
+                        mParams.put("username", "sa");
+                        return mParams;
+                    }
                 };
+                stringRequest.setShouldCache(false);
                 requestQueue.add(stringRequest);
             } catch (JSONException e) {
                 e.printStackTrace();
-            }
+            }*/
         }
     }
 }

@@ -30,4 +30,10 @@
         <item>Autre</item>
     </string-array>
 
+    <string-array name="matiere">
+        <item>Mathématiques</item>
+        <item>Français</item>
+        <item>Histoire</item>
+    </string-array>
+
 </resources>

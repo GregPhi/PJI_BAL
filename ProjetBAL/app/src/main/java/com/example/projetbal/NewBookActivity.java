@@ -15,7 +15,7 @@ import com.example.projetbal.GET.book.BookLoader;
 import com.example.projetbal.GET.book.FetchBook;
 import com.example.projetbal.dataB.book.BookViewModel;
 import com.example.projetbal.object.book.Livre;
-import com.example.projetbal.object.book.StatutsLivre;
+import com.example.projetbal.object.book.enumO.StatutsLivre;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 

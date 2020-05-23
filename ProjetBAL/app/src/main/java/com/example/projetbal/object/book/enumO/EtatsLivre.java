@@ -1,4 +1,4 @@
-package com.example.projetbal.object.book;
+package com.example.projetbal.object.book.enumO;
 
 import android.os.Parcel;
 import android.os.Parcelable;

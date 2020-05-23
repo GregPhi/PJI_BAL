@@ -8,7 +8,7 @@ import java.lang.annotation.RetentionPolicy;
 
 import androidx.annotation.StringDef;
 
-public class Test {
+public class DeclareEnum {
     @Retention(RetentionPolicy.SOURCE)
     @StringDef({TERMINALE, PREMIERE, SECONDE})
     public @interface Niveau {}

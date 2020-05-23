@@ -6,9 +6,9 @@ import android.os.AsyncTask;
 import com.example.projetbal.dao.FoundLivreDao;
 import com.example.projetbal.dao.LivreDao;
 import com.example.projetbal.object.FoundLivre;
-import com.example.projetbal.object.book.EtatsLivre;
+import com.example.projetbal.object.book.enumO.EtatsLivre;
 import com.example.projetbal.object.book.Livre;
-import com.example.projetbal.object.book.StatutsLivre;
+import com.example.projetbal.object.book.enumO.StatutsLivre;
 
 import androidx.annotation.NonNull;
 import androidx.room.Database;

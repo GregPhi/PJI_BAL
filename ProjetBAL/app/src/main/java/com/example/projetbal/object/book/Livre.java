@@ -3,7 +3,12 @@ package com.example.projetbal.object.book;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
 import androidx.annotation.NonNull;
+import androidx.annotation.StringDef;
+import androidx.navigation.NavType;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
