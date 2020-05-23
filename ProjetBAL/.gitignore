@@ -12,3 +12,5 @@
 /captures
 .externalNativeBuild
 .cxx
+/app/src/main/res/xml/*.xml
+/app/src/main/java/com/example/projetbal/object/token/*.java
