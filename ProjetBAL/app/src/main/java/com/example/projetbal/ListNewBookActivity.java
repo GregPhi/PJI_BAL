@@ -25,6 +25,8 @@ import com.example.projetbal.listadapter.NewBookListAdapter;
 import com.example.projetbal.object.Constantes;
 import com.example.projetbal.object.token.Token;
 import com.example.projetbal.object.book.Livre;
+import com.example.projetbal.request.MySingleton;
+import com.example.projetbal.request.VolleyCallback;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONException;
@@ -91,49 +93,14 @@ public class ListNewBookActivity extends AppCompatActivity {
                         }
                         cpt++;
                     }
-                    RequestQueue requestQueue = Volley.newRequestQueue(ListNewBookActivity.this);
-                    final String requestBody = json.toString();
                     String URL = "http://"+Token.ip+"/JSON";
-                    StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+                    postResponse(Request.Method.POST, URL, json, new VolleyCallback() {
                         @Override
-                        public void onResponse(String response) {
-                            Log.i("VOLLEY", response);
+                        public void onSuccessResponse(String result) {
+                            mBookViewModel.deleteAll();
+                            finish();
                         }
-                    }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Log.e("VOLLEY", error.toString());
-                        }
-                    }) {
-                        @Override
-                        public String getBodyContentType() {
-                            return "application/json; charset=utf-8";
-                        }
-
-                        @Override
-                        public byte[] getBody() throws AuthFailureError {
-                            try {
-                                return requestBody == null ? null : requestBody.getBytes("utf-8");
-                            } catch (UnsupportedEncodingException uee) {
-                                VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
-                                return null;
-                            }
-                        }
-
-                        @Override
-                        protected Response<String> parseNetworkResponse(NetworkResponse response) {
-                            String responseString = "";
-                            if (response != null) {
-                                responseString = String.valueOf(response.statusCode);
-                                // can get more details such as response.headers
-                            }
-                            return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
-                        }
-                    };
-                    stringRequest.setRetryPolicy(new DefaultRetryPolicy(DefaultRetryPolicy.DEFAULT_TIMEOUT_MS, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-                    requestQueue.add(stringRequest);
-                    mBookViewModel.deleteAll();
-                    finish();
+                    });
                 } else {
                     Toast net = Toast.makeText(getApplicationContext(), "NO NETWORK !", Toast.LENGTH_SHORT);
                     net.show();
@@ -160,6 +127,47 @@ public class ListNewBookActivity extends AppCompatActivity {
         if(requestCode == Constantes.INFO_BOOK_FAIL){
             Toast.makeText(getApplicationContext(), "Merci d'indiquer un code barre", Toast.LENGTH_LONG).show();
         }
+    }
+
+    public void postResponse(int method, String url, JSONObject jsonValue, final VolleyCallback callback) {
+        RequestQueue requestQueue = MySingleton.getInstance(ListNewBookActivity.this).getRequestQueue();
+        final String requestBody = jsonValue.toString();
+        StringRequest stringRequest = new StringRequest(method, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                callback.onSuccessResponse(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("VOLLEY", error.toString());
+            }
+        }) {
+            @Override
+            public String getBodyContentType() {
+                return "application/json; charset=utf-8";
+            }
+            @Override
+            public byte[] getBody() {
+                try {
+                    return requestBody == null ? null : requestBody.getBytes("utf-8");
+                } catch (UnsupportedEncodingException uee) {
+                    VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
+                    return null;
+                }
+            }
+            @Override
+            protected Response<String> parseNetworkResponse(NetworkResponse response) {
+                String responseString = "";
+                if (response != null) {
+                    responseString = String.valueOf(response.statusCode);
+                    // can get more details such as response.headers
+                }
+                return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
+            }
+        };
+        //stringRequest.setRetryPolicy(new DefaultRetryPolicy(DefaultRetryPolicy.DEFAULT_TIMEOUT_MS, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        MySingleton.getInstance(ListNewBookActivity.this).addToRequestQueue(stringRequest);
     }
 
     public void removeBook(Livre current){
