@@ -34,7 +34,7 @@ public class NewBookActivity extends AppCompatActivity implements View.OnClickLi
 
     private EditText mEditTitleView;
     private EditText mEditCodeBarreView;
-    private EditText mEditMatiereView;
+    private Spinner mSpinnerMatiere;
     private EditText mEditEditeurView;
     private EditText mEditDescriptionView;
     private Spinner mSpinnerAnnee;
@@ -51,7 +51,7 @@ public class NewBookActivity extends AppCompatActivity implements View.OnClickLi
 
         mEditCodeBarreView = findViewById(R.id.edit_cd);
         mEditTitleView = findViewById(R.id.edit_titre);
-        mEditMatiereView = findViewById(R.id.edit_matiere);
+        mSpinnerMatiere = findViewById(R.id.matiere);
         mEditEditeurView = findViewById(R.id.editeur);
         mEditDescriptionView = findViewById(R.id.edit_descrip);
         mSpinnerAnnee = findViewById(R.id.annee);
@@ -143,10 +143,10 @@ public class NewBookActivity extends AppCompatActivity implements View.OnClickLi
         newBook = new Livre();
         newBook.setTitle(mEditTitleView.getText().toString());
         newBook.setCode_barre(mEditCodeBarreView.getText().toString());
-        newBook.setMatiere(mEditMatiereView.getText().toString());
+        newBook.setMatiere(mSpinnerMatiere.getSelectedItem().toString().toUpperCase());
         newBook.setEditeur(mEditEditeurView.getText().toString());
         newBook.setDescription(mEditDescriptionView.getText().toString());
-        newBook.setAnnee(mSpinnerAnnee.getSelectedItem().toString());
+        newBook.setAnnee(mSpinnerAnnee.getSelectedItem().toString().toUpperCase());
         newBook.setEtats(mSpinnerEtat.getSelectedItem().toString());
         newBook.setCommenataires(mEditCommentaire.getText().toString());
         newBook.setStatuts(StatutsLivre.APREPARER.getType());

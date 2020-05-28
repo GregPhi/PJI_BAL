@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.example.projetbal.GET.qrCodeConnection.FetchConnection;
 import com.example.projetbal.dataB.book.BookViewModel;
 import com.example.projetbal.dataB.found.FoundBookViewModel;
+import com.example.projetbal.object.Constantes;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -66,6 +67,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
+        if(resultCode==Constantes.NEW_BOOK_OK){
+
+        }
         IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
         if (scanningResult != null) {
             urlConnection = scanningResult.getContents();
@@ -136,6 +140,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void newBookActivity(View view){
         Intent intent = new Intent(MainActivity.this,ListNewBookActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, Constantes.NEW_BOOK_ACTIVITY);
     }
 }

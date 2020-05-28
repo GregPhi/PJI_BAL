@@ -18,7 +18,7 @@ public class InfoBookActivity extends AppCompatActivity {
 
     private EditText cdBEdit;
     private EditText titleEdit;
-    private EditText matEdit;
+    private Spinner matiereSpinner;
     private EditText infoLivre;
     private Spinner anneSpinner;
     private EditText editeurEdit;
@@ -33,7 +33,7 @@ public class InfoBookActivity extends AppCompatActivity {
 
         this.cdBEdit = findViewById(R.id.edit_cd);
         this.titleEdit = findViewById(R.id.edit_titre);
-        this.matEdit = findViewById(R.id.edit_matiere);
+        this.matiereSpinner = findViewById(R.id.matiere);
         this.infoLivre = findViewById(R.id.edit_descrip);
         this.anneSpinner = findViewById(R.id.annee);
         this.editeurEdit = findViewById(R.id.editeur);
@@ -44,16 +44,18 @@ public class InfoBookActivity extends AppCompatActivity {
         Intent intent = getIntent();
         current = intent.getParcelableExtra("livre");
 
+        String[] arrayMatiere = getResources().getStringArray(R.array.matiere);
         String[] arryAnne = getResources().getStringArray(R.array.annee);
         String[] arryEtat = getResources().getStringArray(R.array.etat_livre);
         String[] arryStatut = getResources().getStringArray(R.array.statut_livre);
+        int idxMatiere = getIndex(arrayMatiere, current.getMatiere());
         int idxAnne = getIndex(arryAnne,current.getAnnee());
         int idxEtat = getIndex(arryEtat,current.getEtats());
         int idxStatut = getIndex(arryStatut,current.getStatuts());
 
         this.cdBEdit.setHint(current.getCode_barre());
         this.titleEdit.setHint(current.getTitle());
-        this.matEdit.setHint(current.getMatiere());
+        this.matiereSpinner.setSelection(idxMatiere);
         this.infoLivre.setHint(current.getDescription());
         this.anneSpinner.setSelection(idxAnne);
         this.editeurEdit.setHint(current.getEditeur());
@@ -61,6 +63,7 @@ public class InfoBookActivity extends AppCompatActivity {
         this.commEdit.setHint(current.getCommenataires());
         this.statutSpinner.setSelection(idxStatut);
 
+        final String oldM = current.getMatiere();
         final String oldA = current.getAnnee();
         final String oldE = current.getEtats();
         final String oldS = current.getStatuts();
@@ -78,8 +81,8 @@ public class InfoBookActivity extends AppCompatActivity {
                     if(!TextUtils.isEmpty(titleEdit.getText())){
                         current.setTitle(titleEdit.getText().toString());
                     }
-                    if(!TextUtils.isEmpty(matEdit.getText())){
-                        current.setMatiere(matEdit.getText().toString());
+                    if(!matiereSpinner.getSelectedItem().toString().equals(oldM)){
+                        current.setMatiere(matiereSpinner.getSelectedItem().toString());
                     }
                     if(!TextUtils.isEmpty(infoLivre.getText())){
                         current.setDescription(infoLivre.getText().toString());

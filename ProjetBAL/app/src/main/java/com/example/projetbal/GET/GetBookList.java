@@ -68,7 +68,7 @@ public class GetBookList extends Context {
 
     public void getBook(String user, final BookViewModel mBookViewModel, final FoundBookViewModel mFoundBookViewModel){
             RequestQueue queue = Volley.newRequestQueue(this);
-            final String url = URL+user;
+            final String url = URL+"/"+user;
             // prepare the Request
             JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                     new Response.Listener<JSONObject>()

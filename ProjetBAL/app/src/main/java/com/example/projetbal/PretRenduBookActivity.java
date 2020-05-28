@@ -117,8 +117,8 @@ public class PretRenduBookActivity extends AppCompatActivity {
                         }
                         cpt++;
                     }
-                    SendBookList send = new SendBookList("",json);
-                    send.sendRequest();
+                    //SendBookList send = new SendBookList("",json,mB);
+                    //send.sendRequest();
                 } else {
                     Toast net = Toast.makeText(getApplicationContext(), "NO NETWORK !", Toast.LENGTH_SHORT);
                     net.show();

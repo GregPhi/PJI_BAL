@@ -37,6 +37,9 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.projetbal.ListNewBookActivity;
+import com.example.projetbal.MainActivity;
+import com.example.projetbal.dataB.book.BookViewModel;
 
 import org.json.JSONObject;
 
@@ -55,23 +58,28 @@ public class SendBookList extends Context {
     private RequestQueue requestQueue;
     private String URL;
     private String requestBody;
+    private static String status = "";
+    private static BookViewModel mBookViewModel;
 
-    public SendBookList(String url, JSONObject body){
+    public SendBookList(String url, JSONObject body, BookViewModel bookViewModel){
         requestQueue = Volley.newRequestQueue(SendBookList.this);
         this.URL = url;
         this.requestBody = body.toString();
+        mBookViewModel = bookViewModel;
     }
 
-    public SendBookList(String url, String body){
+    public SendBookList(String url, String body, BookViewModel bookViewModel){
         requestQueue = Volley.newRequestQueue(SendBookList.this);
         this.URL = url;
         this.requestBody = body;
+        mBookViewModel = bookViewModel;
     }
 
     public void sendRequest(){
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                status = response;
                 Log.i("VOLLEY", response);
             }
         }, new Response.ErrorListener() {
@@ -88,7 +96,6 @@ public class SendBookList extends Context {
             @Override
             public byte[] getBody() throws AuthFailureError {
                 try {
-                    System.out.println(requestBody);
                     return requestBody == null ? null : requestBody.getBytes("utf-8");
                 } catch (UnsupportedEncodingException uee) {
                     VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");

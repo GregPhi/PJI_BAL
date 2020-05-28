@@ -5,9 +5,20 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.HttpHeaderParser;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.projetbal.POST.SendBookList;
 import com.example.projetbal.dataB.book.BookViewModel;
 import com.example.projetbal.listadapter.NewBookListAdapter;
@@ -19,6 +30,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import androidx.annotation.Nullable;
@@ -64,7 +76,7 @@ public class ListNewBookActivity extends AppCompatActivity {
                     networkInfo = connMgr.getActiveNetworkInfo();
                 }
                 if (networkInfo != null && networkInfo.isConnected()) {
-                    /*List<Livre> books = mBookViewModel.getmAllBooksForJson();
+                    List<Livre> books = mBookViewModel.getmAllBooksForJson();
                     JSONObject json = new JSONObject();
                     int cpt = 0;
                     while(cpt < books.size()){
@@ -84,18 +96,50 @@ public class ListNewBookActivity extends AppCompatActivity {
                             e.printStackTrace();
                         }
                         cpt++;
-                    }*/
-                    JSONObject json = new JSONObject();
-                    try {
-                        json.put("title", "Tout en un");
-                        json.put("date", "01/01/2019");
-                        json.put("matiere", "MATHEMATIQUE");
-                        json.put("niveau", "TERMINALE");
-                    } catch (JSONException e) {
-                        e.printStackTrace();
                     }
-                    SendBookList send = new SendBookList("http://"+ Token.ip +"/JSON",json);
-                    send.sendRequest();
+                    RequestQueue requestQueue = Volley.newRequestQueue(ListNewBookActivity.this);
+                    final String requestBody = json.toString();
+                    String URL = "http://"+Token.ip+"/JSON";
+                    StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            if(response.equals("200")){
+                                finishAct();
+                            }
+                            Log.i("VOLLEY", response);
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.e("VOLLEY", error.toString());
+                        }
+                    }) {
+                        @Override
+                        public String getBodyContentType() {
+                            return "application/json; charset=utf-8";
+                        }
+
+                        @Override
+                        public byte[] getBody() throws AuthFailureError {
+                            try {
+                                return requestBody == null ? null : requestBody.getBytes("utf-8");
+                            } catch (UnsupportedEncodingException uee) {
+                                VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
+                                return null;
+                            }
+                        }
+
+                        @Override
+                        protected Response<String> parseNetworkResponse(NetworkResponse response) {
+                            String responseString = "";
+                            if (response != null) {
+                                responseString = String.valueOf(response.statusCode);
+                                // can get more details such as response.headers
+                            }
+                            return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
+                        }
+                    };
+                    requestQueue.add(stringRequest);
                 } else {
                     Toast net = Toast.makeText(getApplicationContext(), "NO NETWORK !", Toast.LENGTH_SHORT);
                     net.show();
@@ -133,5 +177,11 @@ public class ListNewBookActivity extends AppCompatActivity {
         intent.putExtra("livre",current);
         mBookViewModel.delete(current);
         startActivityForResult(intent, Constantes.INFO_BOOK_ACTIVITY);
+    }
+
+    public void finishAct(){
+        mBookViewModel.deleteAll();
+        setResult(Constantes.NEW_BOOK_OK);
+        finish();
     }
 }

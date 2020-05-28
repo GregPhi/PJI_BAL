@@ -73,8 +73,8 @@ public abstract class ProjectRoomDatabase extends RoomDatabase {
             livre2.setTitle("GOT");
             livre2.setEtats(EtatsLivre.BONETAT.toString());
             livre2.setStatuts(StatutsLivre.PREPARE.getType());
-            mBookDao.insert(livre1);
-            mBookDao.insert(livre2);
+            //mBookDao.insert(livre1);
+            //mBookDao.insert(livre2);
             FoundLivre f1 = new FoundLivre(livre1);
             FoundLivre f2 = new FoundLivre(livre2);
             mFoundBookDao.insert(f1);
