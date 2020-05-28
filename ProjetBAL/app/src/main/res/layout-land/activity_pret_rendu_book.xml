@@ -25,19 +25,6 @@
         tools:ignore="MissingConstraints" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/multiScanQRPretRendu"
-        android:layout_width="382dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/fab_margin"
-        android:layout_marginStart="48dp"
-        android:layout_marginBottom="16dp"
-        android:src="@drawable/ic_multiscan"
-        app:backgroundTint="#4CAF50"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/scanQRPretRendu"
-        tools:ignore="MissingConstraints" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/sendPretRendu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

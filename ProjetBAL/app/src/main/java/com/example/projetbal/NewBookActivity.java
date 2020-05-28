@@ -11,8 +11,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.example.projetbal.GET.book.BookLoader;
-import com.example.projetbal.GET.book.FetchBook;
+import com.example.projetbal.request.GET.book.BookLoader;
+import com.example.projetbal.request.GET.book.FetchBook;
 import com.example.projetbal.dataB.book.BookViewModel;
 import com.example.projetbal.object.book.Livre;
 import com.example.projetbal.object.book.enumO.StatutsLivre;

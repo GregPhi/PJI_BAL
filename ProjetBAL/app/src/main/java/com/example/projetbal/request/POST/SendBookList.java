@@ -1,4 +1,4 @@
-package com.example.projetbal.GET;
+package com.example.projetbal.request.POST;
 
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
@@ -27,19 +27,18 @@ import android.os.UserHandle;
 import android.util.Log;
 import android.view.Display;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.HttpHeaderParser;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.projetbal.dataB.book.BookViewModel;
-import com.example.projetbal.dataB.found.FoundBookViewModel;
-import com.example.projetbal.object.FoundLivre;
-import com.example.projetbal.object.book.Livre;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -48,69 +47,71 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-public class GetBookList extends Context {
+public class SendBookList extends Context {
     private RequestQueue requestQueue;
     private String URL;
-    private static String methode = "";
+    private String requestBody;
+    private static String status = "";
+    private static BookViewModel mBookViewModel;
 
-    public GetBookList(String url){
-        requestQueue = Volley.newRequestQueue(GetBookList.this);
+    public SendBookList(String url, JSONObject body, BookViewModel bookViewModel){
+        requestQueue = Volley.newRequestQueue(SendBookList.this);
         this.URL = url;
+        this.requestBody = body.toString();
+        mBookViewModel = bookViewModel;
     }
 
-    public String getMethode(){
-        return methode;
+    public SendBookList(String url, String body, BookViewModel bookViewModel){
+        requestQueue = Volley.newRequestQueue(SendBookList.this);
+        this.URL = url;
+        this.requestBody = body;
+        mBookViewModel = bookViewModel;
     }
 
-    public void getBook(String user, final BookViewModel mBookViewModel, final FoundBookViewModel mFoundBookViewModel){
-            RequestQueue queue = Volley.newRequestQueue(this);
-            final String url = URL+"/"+user;
-            // prepare the Request
-            JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url, null,
-                    new Response.Listener<JSONObject>()
-                    {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            try {
-                                GetBookList.methode = response.getString("methode");
-                                int cpt = 0;
-                                JSONArray array = response.getJSONArray("livres");
-                                while(cpt < array.length()){
-                                    JSONObject obj = array.getJSONObject(cpt);
-                                    Livre livre = new Livre();
-                                    livre.setCode_barre(obj.getString("code barre"));
-                                    livre.setTitle(obj.getString("titre"));
-                                    livre.setMatiere(obj.getString("matiere"));
-                                    livre.setDescription(obj.getString("infos"));
-                                    livre.setAnnee(obj.getString("annee"));
-                                    livre.setEditeur(obj.getString("editeur"));
-                                    livre.setEtats(obj.getString("etat du livre"));
-                                    livre.setCommenataires(obj.getString("commentaire"));
-                                    livre.setStatuts(obj.getString("statut"));
-                                    mBookViewModel.insert(livre);
-                                    mFoundBookViewModel.insert(new FoundLivre(livre));
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                            // display response
-                            Log.d("Response", response.toString());
-                        }
-                    },
-                    new Response.ErrorListener()
-                    {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Log.d("Error.Response", error.toString());
-                        }
-                    }
-            );
-            // add it to the RequestQueue
-            queue.add(getRequest);
+    public void sendRequest(){
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                status = response;
+                Log.i("VOLLEY", response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("VOLLEY", error.toString());
+            }
+        }) {
+            @Override
+            public String getBodyContentType() {
+                return "application/json; charset=utf-8";
+            }
+
+            @Override
+            public byte[] getBody() throws AuthFailureError {
+                try {
+                    return requestBody == null ? null : requestBody.getBytes("utf-8");
+                } catch (UnsupportedEncodingException uee) {
+                    VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
+                    return null;
+                }
+            }
+
+            @Override
+            protected Response<String> parseNetworkResponse(NetworkResponse response) {
+                String responseString = "";
+                if (response != null) {
+                    responseString = String.valueOf(response.statusCode);
+                    // can get more details such as response.headers
+                }
+                return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
+            }
+        };
+        requestQueue.add(stringRequest);
     }
 
     @Override

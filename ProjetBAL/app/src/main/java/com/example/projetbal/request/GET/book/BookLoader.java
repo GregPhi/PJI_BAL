@@ -1,4 +1,4 @@
-package com.example.projetbal.GET.book;
+package com.example.projetbal.request.GET.book;
 
 import android.content.Context;
 

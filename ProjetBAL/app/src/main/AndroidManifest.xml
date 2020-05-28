@@ -17,7 +17,8 @@
         <activity android:name=".ListNewBookActivity"></activity>
         <activity android:name=".NewBookActivity"></activity>
         <activity android:name=".InfoBookActivity"></activity>
-        <activity android:name=".PretRenduBookActivity"></activity>
+        <activity android:name=".PretRenduBookActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"

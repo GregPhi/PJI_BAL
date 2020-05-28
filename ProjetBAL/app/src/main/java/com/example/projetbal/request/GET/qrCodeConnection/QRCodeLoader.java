@@ -1,4 +1,4 @@
-package com.example.projetbal.GET.qrCodeConnection;
+package com.example.projetbal.request.GET.qrCodeConnection;
 
 import android.content.Context;
 

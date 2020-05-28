@@ -1,9 +1,8 @@
-package com.example.projetbal.GET.book;
+package com.example.projetbal.request.GET.book;
 
 import android.os.AsyncTask;
 import android.widget.TextView;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;

@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -19,7 +20,6 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.projetbal.POST.SendBookList;
 import com.example.projetbal.dataB.book.BookViewModel;
 import com.example.projetbal.listadapter.NewBookListAdapter;
 import com.example.projetbal.object.Constantes;
@@ -69,13 +69,7 @@ public class ListNewBookActivity extends AppCompatActivity {
         uploadNewBook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ConnectivityManager connMgr = (ConnectivityManager)
-                        getSystemService(Context.CONNECTIVITY_SERVICE);
-                NetworkInfo networkInfo = null;
-                if (connMgr != null) {
-                    networkInfo = connMgr.getActiveNetworkInfo();
-                }
-                if (networkInfo != null && networkInfo.isConnected()) {
+                if (isConnected()) {
                     List<Livre> books = mBookViewModel.getmAllBooksForJson();
                     JSONObject json = new JSONObject();
                     int cpt = 0;
@@ -103,9 +97,6 @@ public class ListNewBookActivity extends AppCompatActivity {
                     StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
-                            if(response.equals("200")){
-                                finishAct();
-                            }
                             Log.i("VOLLEY", response);
                         }
                     }, new Response.ErrorListener() {
@@ -139,7 +130,10 @@ public class ListNewBookActivity extends AppCompatActivity {
                             return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
                         }
                     };
+                    stringRequest.setRetryPolicy(new DefaultRetryPolicy(DefaultRetryPolicy.DEFAULT_TIMEOUT_MS, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
                     requestQueue.add(stringRequest);
+                    mBookViewModel.deleteAll();
+                    finish();
                 } else {
                     Toast net = Toast.makeText(getApplicationContext(), "NO NETWORK !", Toast.LENGTH_SHORT);
                     net.show();
@@ -179,9 +173,16 @@ public class ListNewBookActivity extends AppCompatActivity {
         startActivityForResult(intent, Constantes.INFO_BOOK_ACTIVITY);
     }
 
-    public void finishAct(){
-        mBookViewModel.deleteAll();
-        setResult(Constantes.NEW_BOOK_OK);
-        finish();
+    public boolean isConnected(){
+        ConnectivityManager connMgr = (ConnectivityManager)
+                getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = null;
+        if (connMgr != null) {
+            networkInfo = connMgr.getActiveNetworkInfo();
+        }
+        if (networkInfo != null && networkInfo.isConnected()) {
+            return true;
+        }
+        return false;
     }
 }
