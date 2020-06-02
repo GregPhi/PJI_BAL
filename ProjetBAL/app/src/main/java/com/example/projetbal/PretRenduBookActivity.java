@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.NetworkResponse;
@@ -59,6 +60,8 @@ public class PretRenduBookActivity extends AppCompatActivity {
     private String user;
     private String methode;
     private static String commentaireD;
+    private final String URL_POST = "http://"+Token.ip+"/statutLivre";
+    private final String URL_GET = "http://"+Token.ip+"/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,13 +123,11 @@ public class PretRenduBookActivity extends AppCompatActivity {
                         }
                         cpt++;
                     }
-                    final String URL_POST = "http://"+Token.ip+"/JSON";
-                    final String URL_GET = "http://"+Token.ip+"/JSON";
                     postResponse(PretRenduBookActivity.this,Request.Method.POST, URL_POST, json, new VolleyCallback() {
                         @Override
                         public void onSuccessResponse(String result) {
                             mFoundBookViewModel.deleteAll();
-                            finish();
+                            //finish();
                             getResponse(PretRenduBookActivity.this,Request.Method.GET, URL_GET, new VolleyCallback() {
                                 @Override
                                 public void onSuccessResponse(String result) {
@@ -191,53 +192,24 @@ public class PretRenduBookActivity extends AppCompatActivity {
             return true;
         }
         if (id == R.id.action_isbn){
-            final AlertDialog dialog = new AlertDialog.Builder(PretRenduBookActivity.this).create();
-            LayoutInflater layout = PretRenduBookActivity.this.getLayoutInflater();
-            View dialogView = layout.inflate(R.layout.dialog_input_isbn,null);
-            final EditText comm = dialogView.findViewById(R.id.dialogIsbn);
-            Button annuler = dialogView.findViewById(R.id.isbnAnnuler);
-            Button ok = dialogView.findViewById(R.id.isbnOk);
-            annuler.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    dialog.dismiss();
-                }
-            });
-            ok.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if(!TextUtils.isEmpty(comm.getText())){
-                        serachIsbnInFoundBook(comm.getText().toString());
-                    }
-                    dialog.dismiss();
-                }
-            });
-            dialog.setView(dialogView);
+            AlertDialog dialog = setDialogBox("Rentrez un ISBN que vous recherchez","Recherchez");
             dialog.show();
             return true;
         }
         if (id == R.id.action_commentaire){
-            final AlertDialog dialog = new AlertDialog.Builder(PretRenduBookActivity.this).create();
-            LayoutInflater layout = PretRenduBookActivity.this.getLayoutInflater();
-            View dialogView = layout.inflate(R.layout.dialog_commentaire,null);
-            final EditText comm = dialogView.findViewById(R.id.dialogComm);
-            Button annuler = dialogView.findViewById(R.id.commAnnuler);
-            Button ok = dialogView.findViewById(R.id.commOk);
-            annuler.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    dialog.dismiss();
-                }
-            });
-            ok.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    PretRenduBookActivity.commentaireD += comm.getText().toString()+"\n";
-                    dialog.dismiss();
-                }
-            });
-            dialog.setView(dialogView);
+            AlertDialog dialog = setDialogBox("Création d'un commentaire","Création");
             dialog.show();
+            return true;
+        }
+        if (id == R.id.action_eleveid){
+            AlertDialog dialog = setDialogBox("Rentrez l'ID d'un élève","Recherchez");
+            dialog.show();
+            return true;
+        }
+        if (id == R.id.action_user){
+            AlertDialog dialog = setDialogBox("Entrez un identifiant","Recherchez");
+            dialog.show();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -261,6 +233,108 @@ public class PretRenduBookActivity extends AppCompatActivity {
         if(requestCode == Constantes.INFO_BOOK_FAIL){
             Toast.makeText(getApplicationContext(), "Merci d'indiquer un code barre", Toast.LENGTH_LONG).show();
         }
+    }
+
+    public AlertDialog setDialogBox(final String t, String v){
+        final AlertDialog dialog = new AlertDialog.Builder(PretRenduBookActivity.this).create();
+        LayoutInflater layout = PretRenduBookActivity.this.getLayoutInflater();
+        View dialogView = layout.inflate(R.layout.dialog_input,null);
+        TextView title = dialogView.findViewById(R.id.dialogTitle);
+        title.setText(t);
+        final EditText input = dialogView.findViewById(R.id.inputDialog);
+        Button annuler = dialogView.findViewById(R.id.buttonAnnulate);
+        Button ok = dialogView.findViewById(R.id.buttonValidate);
+        ok.setText(v);
+        annuler.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!TextUtils.isEmpty(input.getText())){
+                    String in = input.getText().toString();
+                    switch (t){
+                        case "Création d'un commentaire":
+                            PretRenduBookActivity.commentaireD += input.getText().toString()+"\n";
+                            break;
+                        case "Rentrez un ISBN que vous recherchez":
+                            serachIsbnInFoundBook(input.getText().toString());
+                            break;
+                        case "Rentrez l'ID d'un élève":
+                            RequestQueue requestQueueID = VolleySingleton.getInstance(PretRenduBookActivity.this).getRequestQueue();
+                            StringRequest stringRequestID = new StringRequest(Request.Method.GET, URL_GET+"getLivresEleve/"+in, new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    try {
+                                        mFoundBookViewModel.deleteAll();
+                                        JSONObject livres = new JSONObject(response);
+                                        for(int i =0; i < livres.length(); i++){
+                                            JSONObject livre = (JSONObject) livres.get(String.valueOf(i));
+                                            Livre l = new Livre();
+                                            l.setId(livre.getInt("id"));
+                                            l.setTitle(livre.getString("titre"));
+                                            l.setMatiere(livre.getString("matiere"));
+                                            l.setAnnee(livre.getString("niveau"));
+                                            l.setEtats(livre.getString("etat livre"));
+                                            l.setStatuts(livre.getString("statut livre"));
+                                            FoundLivre f = new FoundLivre(l);
+                                            mFoundBookViewModel.insert(f);
+                                        }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                    //callback.onSuccessResponse(response);
+                                }
+                            }, new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Log.e("VOLLEY", error.toString());
+                                }
+                            });
+                            VolleySingleton.getInstance(PretRenduBookActivity.this).addToRequestQueue(stringRequestID);
+                            break;
+                        case "Entrez un identifiant":
+                            RequestQueue requestQueueUser = VolleySingleton.getInstance(PretRenduBookActivity.this).getRequestQueue();
+                            StringRequest stringRequestUser = new StringRequest(Request.Method.GET, URL_GET+in, new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    try {
+                                        mFoundBookViewModel.deleteAll();
+                                        JSONObject livres = new JSONObject(response);
+                                        for(int i =0; i < livres.length(); i++){
+                                            JSONObject livre = (JSONObject) livres.get(String.valueOf(i));
+                                            Livre l = new Livre();
+                                            l.setId(livre.getInt("id"));
+                                            l.setTitle(livre.getString("titre"));
+                                            l.setMatiere(livre.getString("matiere"));
+                                            l.setAnnee(livre.getString("niveau"));
+                                            l.setEtats(livre.getString("etat livre"));
+                                            l.setStatuts(livre.getString("statut livre"));
+                                            FoundLivre f = new FoundLivre(l);
+                                            mFoundBookViewModel.insert(f);
+                                        }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }, new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Log.e("VOLLEY", error.toString());
+                                }
+                            });
+                            VolleySingleton.getInstance(PretRenduBookActivity.this).addToRequestQueue(stringRequestUser);
+                            break;
+                    }
+                }
+                dialog.dismiss();
+            }
+        });
+        dialog.setView(dialogView);
+        return dialog;
     }
 
     public void serachIsbnInFoundBook(String isbn){
@@ -338,11 +412,6 @@ public class PretRenduBookActivity extends AppCompatActivity {
     }
 
     public void infosBook(FoundLivre current){
-        /*AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-        dialog.setTitle("Informations");
-        dialog.setMessage(current.toString()+"\n"+current.getStatuts());
-        dialog.setCancelable(true);
-        dialog.show();*/
         Intent intent = new Intent( PretRenduBookActivity.this, InfoBookStatutActivity.class);
         intent.putExtra("livre",current);
         startActivityForResult(intent, Constantes.INFO_BOOK_ACTIVITY);

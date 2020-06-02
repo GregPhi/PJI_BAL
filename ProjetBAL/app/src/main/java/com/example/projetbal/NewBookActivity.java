@@ -109,8 +109,6 @@ public class NewBookActivity extends AppCompatActivity implements View.OnClickLi
     public void onLoaderReset(@NonNull Loader<String> loader) {
     }
 
-
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);

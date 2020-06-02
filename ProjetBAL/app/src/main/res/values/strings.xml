@@ -43,5 +43,7 @@
     <string name="scanner_un_code_barres">Scanner un code barres</string>
     <string name="statut_du_livre">Statut du livre</string>
     <string name="modifier_le_livre">Modifier le livre</string>
+    <string name="identifiant">Identifiant</string>
+    <string name="id_de_l_l_ve">ID de l\'élève</string>
 
 </resources>

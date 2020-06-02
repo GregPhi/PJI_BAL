@@ -69,22 +69,7 @@ public abstract class ProjectRoomDatabase extends RoomDatabase {
             mBookDao.deleteAll();
             mFoundBookDao.deleteAll();
             matiereDao.deleteAll();
-            Livre livre1 = new Livre();
-            livre1.setCode_barre("9782013235327");
-            livre1.setTitle("Hobbit");
-            livre1.setEtats(EtatsLivre.NEUF.toString());
-            livre1.setStatuts(StatutsLivre.PREPARE.getType());
-            Livre livre2 = new Livre();
-            livre2.setCode_barre("9782290019436");
-            livre2.setTitle("GOT");
-            livre2.setEtats(EtatsLivre.BONETAT.toString());
-            livre2.setStatuts(StatutsLivre.PREPARE.getType());
-            //mBookDao.insert(livre1);
-            //mBookDao.insert(livre2);
-            FoundLivre f1 = new FoundLivre(livre1);
-            FoundLivre f2 = new FoundLivre(livre2);
-            mFoundBookDao.insert(f1);
-            mFoundBookDao.insert(f2);
+
             return null;
         }
     }

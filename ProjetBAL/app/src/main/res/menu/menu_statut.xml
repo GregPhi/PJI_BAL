@@ -17,4 +17,14 @@
         android:orderInCategory="100"
         android:title="@string/commentaires"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_eleveid"
+        android:orderInCategory="100"
+        android:title="@string/id_de_l_l_ve"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_user"
+        android:orderInCategory="100"
+        android:title="@string/identifiant"
+        app:showAsAction="never" />
 </menu>

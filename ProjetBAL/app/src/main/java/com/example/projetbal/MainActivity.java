@@ -78,16 +78,12 @@ public class MainActivity extends AppCompatActivity {
                     try {
                         JSONObject mat = new JSONObject(result);
                         Iterator<String> keys = mat.keys();
-                        List<Matiere> ma = new ArrayList<>();
                         while(keys.hasNext()){
                             Matiere m = new Matiere();
                             String k = keys.next();
                             m.setNom(k);
                             m.setId((Integer) mat.get(k));
-                            ma.add(m);
-                        }
-                        for(Matiere matt : ma){
-                            matiereViewModel.insert(matt);
+                            matiereViewModel.insert(m);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -98,8 +94,6 @@ public class MainActivity extends AppCompatActivity {
                     return ;
                 }
             });
-        }else{
-
         }
     }
 
@@ -155,24 +149,21 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Merci d'indiquer un nom d'utilisateur", Toast.LENGTH_LONG).show();
         }else{
             String user = userEdit.getText().toString();
-            String methode = "";
+            //String methode = "";
             if (isConnected()) {
-                //GetBookList get = new GetBookList("");
-                //get.getBook(user,mBookViewModel,mFoundBookViewModel);
-                //methode = get.getMethode();
             } else {
                 Toast net = Toast.makeText(getApplicationContext(), "NO NETWORK !", Toast.LENGTH_SHORT);
                 net.show();
             }
             Intent intent = new Intent(MainActivity.this,PretRenduBookActivity.class);
             intent.putExtra("user", user);
-            if(user.toLowerCase().equals("emprunt")){
+            /*if(user.toLowerCase().equals("emprunt")){
                 methode = "Emprunt";
             }
             if(user.toLowerCase().equals("rendu")){
                 methode = "Rendu";
             }
-            intent.putExtra("methode", methode);
+            intent.putExtra("methode", methode);*/
             startActivity(intent);
         }
     }
@@ -194,12 +185,12 @@ public class MainActivity extends AppCompatActivity {
             String id = idEdit.getText().toString();
             if (isConnected()) {
                 recupLivresTest(MainActivity.this,Request.Method.GET, "http://"+Token.ip+"/getLivresEleve/"+id);
+                Intent intent = new Intent(MainActivity.this,PretRenduBookActivity.class);
+                startActivity(intent);
             } else {
                 Toast net = Toast.makeText(getApplicationContext(), "NO NETWORK !", Toast.LENGTH_SHORT);
                 net.show();
             }
-            Intent intent = new Intent(MainActivity.this,PretRenduBookActivity.class);
-            startActivity(intent);
         }
     }
 
@@ -233,13 +224,13 @@ public class MainActivity extends AppCompatActivity {
                         l.setAnnee(livre.getString("niveau"));
                         l.setEtats(livre.getString("etat livre"));
                         l.setStatuts(livre.getString("statut livre"));
+                        System.out.println(l.getStatuts());
                         FoundLivre f = new FoundLivre(l);
                         mFoundBookViewModel.insert(f);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                //callback.onSuccessResponse(response);
             }
         }, new Response.ErrorListener() {
             @Override
