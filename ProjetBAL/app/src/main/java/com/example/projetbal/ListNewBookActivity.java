@@ -9,8 +9,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -19,13 +17,12 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.projetbal.dataB.book.BookViewModel;
 import com.example.projetbal.listadapter.NewBookListAdapter;
 import com.example.projetbal.object.Constantes;
 import com.example.projetbal.object.token.Token;
 import com.example.projetbal.object.book.Livre;
-import com.example.projetbal.request.MySingleton;
+import com.example.projetbal.request.VolleySingleton;
 import com.example.projetbal.request.VolleyCallback;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -93,12 +90,17 @@ public class ListNewBookActivity extends AppCompatActivity {
                         }
                         cpt++;
                     }
-                    String URL = "http://"+Token.ip+"/JSON";
-                    postResponse(Request.Method.POST, URL, json, new VolleyCallback() {
+                    //System.out.println(json.toString());
+                    String URL = "http://"+Token.ip+"/createLivreJSON";
+                    postResponse(ListNewBookActivity.this,Request.Method.POST, URL, json, new VolleyCallback() {
                         @Override
                         public void onSuccessResponse(String result) {
                             mBookViewModel.deleteAll();
                             finish();
+                        }
+                        @Override
+                        public void onSuccessResponse(JSONObject result) {
+                            return ;
                         }
                     });
                 } else {
@@ -129,8 +131,8 @@ public class ListNewBookActivity extends AppCompatActivity {
         }
     }
 
-    public void postResponse(int method, String url, JSONObject jsonValue, final VolleyCallback callback) {
-        RequestQueue requestQueue = MySingleton.getInstance(ListNewBookActivity.this).getRequestQueue();
+    public void postResponse(Context ctx, int method, String url, JSONObject jsonValue, final VolleyCallback callback) {
+        RequestQueue requestQueue = VolleySingleton.getInstance(ctx).getRequestQueue();
         final String requestBody = jsonValue.toString();
         StringRequest stringRequest = new StringRequest(method, url, new Response.Listener<String>() {
             @Override
@@ -167,7 +169,7 @@ public class ListNewBookActivity extends AppCompatActivity {
             }
         };
         //stringRequest.setRetryPolicy(new DefaultRetryPolicy(DefaultRetryPolicy.DEFAULT_TIMEOUT_MS, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        MySingleton.getInstance(ListNewBookActivity.this).addToRequestQueue(stringRequest);
+        VolleySingleton.getInstance(ctx).addToRequestQueue(stringRequest);
     }
 
     public void removeBook(Livre current){
@@ -177,7 +179,7 @@ public class ListNewBookActivity extends AppCompatActivity {
     public void infosBook(Livre current){
         Intent intent = new Intent( ListNewBookActivity.this, InfoBookActivity.class);
         intent.putExtra("livre",current);
-        mBookViewModel.delete(current);
+        //mBookViewModel.delete(current);
         startActivityForResult(intent, Constantes.INFO_BOOK_ACTIVITY);
     }
 

@@ -58,6 +58,13 @@
                 android:layout_weight="1"
                 android:text="@string/informations_du_livre" />
 
+            <Button
+                android:id="@+id/bookVerified"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="vérifié" />
+
         </LinearLayout>
 
     </LinearLayout>

@@ -14,6 +14,19 @@ public enum StatutsLivre implements Parcelable {
         this.type = t;
     }
 
+    public static String getStatutByMethod(String method){
+        switch (method){
+            case "Préparation":
+                return PREPARE.getType();
+            case "Emprunt":
+                return EMPRUNTE.getType();
+            case "Rendu":
+                return RENDU.getType();
+            default:
+                return AUTRE.getType();
+        }
+    }
+
     public static String getNextStatut(String type){
         switch (type){
             case "A préparer":

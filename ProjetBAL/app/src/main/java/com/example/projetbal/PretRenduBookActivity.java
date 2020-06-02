@@ -16,7 +16,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -24,14 +23,17 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HttpHeaderParser;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.projetbal.dataB.found.FoundBookViewModel;
 import com.example.projetbal.listadapter.PretRenduBookListAdapter;
+import com.example.projetbal.object.Constantes;
 import com.example.projetbal.object.FoundLivre;
 import com.example.projetbal.object.book.Livre;
 import com.example.projetbal.object.book.enumO.StatutsLivre;
 import com.example.projetbal.object.token.Token;
+import com.example.projetbal.request.VolleySingleton;
+import com.example.projetbal.request.VolleyCallback;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -90,48 +92,82 @@ public class PretRenduBookActivity extends AppCompatActivity {
         sendPretRendu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ConnectivityManager connMgr = (ConnectivityManager)
-                        getSystemService(Context.CONNECTIVITY_SERVICE);
-                NetworkInfo networkInfo = null;
-                if (connMgr != null) {
-                    networkInfo = connMgr.getActiveNetworkInfo();
-                }
-                if (networkInfo != null && networkInfo.isConnected()) {
-                   send();
+                if (isConnected()) {
+                    List<FoundLivre> books = mFoundBookViewModel.getmAllFoundBooksList();
+                    JSONObject json = new JSONObject();
+                    try {
+                        json.put("Commentaires",commentaireD);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    int cpt = 0;
+                    while(cpt < books.size()){
+                        JSONObject object = new JSONObject();
+                        try {
+                            Livre book = books.get(cpt).getLivre();
+                            object.put("code_barre",book.getCode_barre());
+                            object.put("titre",book.getTitle());
+                            object.put("matiere",book.getMatiere());
+                            object.put("infos",book.getDescription());
+                            object.put("annee",book.getAnnee());
+                            object.put("editeur",book.getEditeur());
+                            object.put("etat",book.getEtats());
+                            object.put("commentaire",book.getCommenataires());
+                            object.put("statut",book.getStatuts());
+                            json.put(String.valueOf(cpt),object);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        cpt++;
+                    }
+                    final String URL_POST = "http://"+Token.ip+"/JSON";
+                    final String URL_GET = "http://"+Token.ip+"/JSON";
+                    postResponse(PretRenduBookActivity.this,Request.Method.POST, URL_POST, json, new VolleyCallback() {
+                        @Override
+                        public void onSuccessResponse(String result) {
+                            mFoundBookViewModel.deleteAll();
+                            finish();
+                            getResponse(PretRenduBookActivity.this,Request.Method.GET, URL_GET, new VolleyCallback() {
+                                @Override
+                                public void onSuccessResponse(String result) {
+                                    return ;
+                                }
+                                @Override
+                                public void onSuccessResponse(JSONObject result) {
+                                    try {
+                                        int cpt = 0;
+                                        JSONArray array = result.getJSONArray("livres");
+                                        while(cpt < array.length()){
+                                            JSONObject obj = array.getJSONObject(cpt);
+                                            Livre livre = new Livre();
+                                            livre.setCode_barre(obj.getString("code barre"));
+                                            livre.setTitle(obj.getString("titre"));
+                                            livre.setMatiere(obj.getString("matiere"));
+                                            livre.setDescription(obj.getString("infos"));
+                                            livre.setAnnee(obj.getString("annee"));
+                                            livre.setEditeur(obj.getString("editeur"));
+                                            livre.setEtats(obj.getString("etat du livre"));
+                                            livre.setCommenataires(obj.getString("commentaire"));
+                                            livre.setStatuts(obj.getString("statut"));
+                                            mFoundBookViewModel.insert(new FoundLivre(livre));
+                                        }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            });
+                        }
+                        @Override
+                        public void onSuccessResponse(JSONObject result) {
+                            return ;
+                        }
+                    });
                 } else {
                     Toast net = Toast.makeText(getApplicationContext(), "NO NETWORK !", Toast.LENGTH_SHORT);
                     net.show();
                 }
             }
         });
-
-        /*FloatingActionButton commBut = findViewById(R.id.pret_commentare);
-        commBut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final AlertDialog dialog = new AlertDialog.Builder(PretRenduBookActivity.this).create();
-                LayoutInflater layout = PretRenduBookActivity.this.getLayoutInflater();
-                View dialogView = layout.inflate(R.layout.dialog_commentaire,null);
-                final EditText comm = dialogView.findViewById(R.id.dialogComm);
-                Button annuler = dialogView.findViewById(R.id.commAnnuler);
-                Button ok = dialogView.findViewById(R.id.commOk);
-                annuler.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        dialog.dismiss();
-                    }
-                });
-                ok.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        PretRenduBookActivity.commentaireD += comm.getText().toString()+"\n";
-                        dialog.dismiss();
-                    }
-                });
-                dialog.setView(dialogView);
-                dialog.show();
-            }
-        });*/
 
         mFoundBookViewModel.getmAllFoundBooks().observe(this, new Observer<List<FoundLivre>>() {
             @Override
@@ -213,9 +249,17 @@ public class PretRenduBookActivity extends AppCompatActivity {
         if (scanningResult != null) {
             String isbn = scanningResult.getContents();
             serachIsbnInFoundBook(isbn);
-        } else {
+        }
+        if (scanningResult == null) {
             Toast toast = Toast.makeText(getApplicationContext(), "No scan data received!", Toast.LENGTH_SHORT);
             toast.show();
+        }
+        if(requestCode == Constantes.INFO_BOOK_OK){
+            FoundLivre book = intent.getParcelableExtra("livre");
+            mFoundBookViewModel.insert(book);
+        }
+        if(requestCode == Constantes.INFO_BOOK_FAIL){
+            Toast.makeText(getApplicationContext(), "Merci d'indiquer un code barre", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -226,7 +270,7 @@ public class PretRenduBookActivity extends AppCompatActivity {
             if(l.getCode_barre().equals(isbn)){
                 mFoundBookViewModel.delete(f);
                 String s = l.getStatuts();
-                l.setStatuts(StatutsLivre.getNextStatut(s));
+                l.setStatuts(StatutsLivre.getStatutByMethod(methode));
                 f.setLivre(l);
                 f.setFound(true);
                 mFoundBookViewModel.insert(f);
@@ -234,43 +278,13 @@ public class PretRenduBookActivity extends AppCompatActivity {
         }
     }
 
-    public void send(){
-        RequestQueue requestQueue = Volley.newRequestQueue(PretRenduBookActivity.this);
-        String URL = "http://"+ Token.ip+"/JSON";
-        List<FoundLivre> foundLivres = mFoundBookViewModel.getmAllFoundBooksList();
-        JSONObject json = new JSONObject();
-        JSONArray livres = new JSONArray();
-        for(int i = 0; i < foundLivres.size(); i++){
-            Livre livre = foundLivres.get(i).getLivre();
-            JSONObject num = new JSONObject();
-            JSONObject object = new JSONObject();
-            try {
-                object.put("code_barre",livre.getCode_barre());
-                object.put("titre",livre.getTitle());
-                object.put("matiere",livre.getMatiere());
-                object.put("infos",livre.getDescription());
-                object.put("annee",livre.getAnnee());
-                object.put("editeur",livre.getEditeur());
-                object.put("etat",livre.getEtats());
-                object.put("commentaire",livre.getCommenataires());
-                object.put("statut",livre.getStatuts());
-                num.put(String.valueOf(i),object);
-                livres.put(num);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        try {
-            json.put("Commentaires",commentaireD);
-            json.put("livres",livres);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        final String requestBody = json.toString();
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+    public void postResponse(Context ctx, int method, String url, JSONObject jsonValue, final VolleyCallback callback) {
+        RequestQueue requestQueue = VolleySingleton.getInstance(ctx).getRequestQueue();
+        final String requestBody = jsonValue.toString();
+        StringRequest stringRequest = new StringRequest(method, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.i("VOLLEY", response);
+                callback.onSuccessResponse(response);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -282,18 +296,15 @@ public class PretRenduBookActivity extends AppCompatActivity {
             public String getBodyContentType() {
                 return "application/json; charset=utf-8";
             }
-
             @Override
-            public byte[] getBody() throws AuthFailureError {
+            public byte[] getBody() {
                 try {
-                    System.out.println(requestBody);
                     return requestBody == null ? null : requestBody.getBytes("utf-8");
                 } catch (UnsupportedEncodingException uee) {
                     VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
                     return null;
                 }
             }
-
             @Override
             protected Response<String> parseNetworkResponse(NetworkResponse response) {
                 String responseString = "";
@@ -304,14 +315,59 @@ public class PretRenduBookActivity extends AppCompatActivity {
                 return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
             }
         };
-        requestQueue.add(stringRequest);
+        //stringRequest.setRetryPolicy(new DefaultRetryPolicy(DefaultRetryPolicy.DEFAULT_TIMEOUT_MS, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        VolleySingleton.getInstance(ctx).addToRequestQueue(stringRequest);
     }
 
-    public void infosBook(Livre current){
-        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+    public void getResponse(Context ctx, int method, String url, final VolleyCallback callback) {
+        RequestQueue requestQueue = VolleySingleton.getInstance(ctx).getRequestQueue();
+        JsonObjectRequest getRequest = new JsonObjectRequest(method, url, null, new Response.Listener<JSONObject>(){
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        callback.onSuccessResponse(response);
+                        Log.d("Response", response.toString());
+                    }
+                }, new Response.ErrorListener(){
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("Error.Response", error.toString());
+                    }
+                }
+        );
+        VolleySingleton.getInstance(ctx).addToRequestQueue(getRequest);
+    }
+
+    public void infosBook(FoundLivre current){
+        /*AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setTitle("Informations");
         dialog.setMessage(current.toString()+"\n"+current.getStatuts());
         dialog.setCancelable(true);
-        dialog.show();
+        dialog.show();*/
+        Intent intent = new Intent( PretRenduBookActivity.this, InfoBookStatutActivity.class);
+        intent.putExtra("livre",current);
+        startActivityForResult(intent, Constantes.INFO_BOOK_ACTIVITY);
+    }
+
+    public void bookVerified(FoundLivre current){
+        Livre l = current.getLivre();
+        mFoundBookViewModel.delete(current);
+        String s = l.getStatuts();
+        l.setStatuts(StatutsLivre.getStatutByMethod(methode));
+        current.setLivre(l);
+        current.setFound(true);
+        mFoundBookViewModel.insert(current);
+    }
+
+    public boolean isConnected(){
+        ConnectivityManager connMgr = (ConnectivityManager)
+                getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = null;
+        if (connMgr != null) {
+            networkInfo = connMgr.getActiveNetworkInfo();
+        }
+        if (networkInfo != null && networkInfo.isConnected()) {
+            return true;
+        }
+        return false;
     }
 }

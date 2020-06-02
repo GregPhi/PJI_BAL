@@ -151,7 +151,6 @@ public class NewBookActivity extends AppCompatActivity implements View.OnClickLi
         newBook.setCommenataires(mEditCommentaire.getText().toString());
         newBook.setStatuts(StatutsLivre.APREPARER.getType());
         mBookViewModel.insert(newBook);
-        Intent intent = new Intent(NewBookActivity.this,ListNewBookActivity.class);
-        startActivity(intent);
+        finish();
     }
 }

@@ -27,6 +27,7 @@ public class PretRenduBookListAdapter extends RecyclerView.Adapter<PretRenduBook
         private final TextView anneeItemView;
         private ImageView statutItemView;
         private final Button bI;
+        private final Button bV;
 
         protected BookViewHolder(final View itemView) {
             super(itemView);
@@ -39,6 +40,8 @@ public class PretRenduBookListAdapter extends RecyclerView.Adapter<PretRenduBook
             statutItemView = itemView.findViewById(R.id.state);
             bI = itemView.findViewById(R.id.infos);
             bI.setActivated(true);
+            bV = itemView.findViewById(R.id.bookVerified);
+            bV.setActivated(true);
         }
     }
 
@@ -72,7 +75,13 @@ public class PretRenduBookListAdapter extends RecyclerView.Adapter<PretRenduBook
             holder.bI.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View view){
-                    mContext.infosBook(book);
+                    mContext.infosBook(currentfound);
+                }
+            });
+            holder.bV.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View view){
+                    mContext.bookVerified(currentfound);
                 }
             });
         } else {
