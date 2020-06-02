@@ -18,6 +18,7 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
 import com.example.projetbal.dataB.book.BookViewModel;
+import com.example.projetbal.dataB.matiere.MatiereViewModel;
 import com.example.projetbal.listadapter.NewBookListAdapter;
 import com.example.projetbal.object.Constantes;
 import com.example.projetbal.object.token.Token;
@@ -52,8 +53,6 @@ public class ListNewBookActivity extends AppCompatActivity {
         final NewBookListAdapter adapter = new NewBookListAdapter(ListNewBookActivity.this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        mBookViewModel = ViewModelProviders.of(this).get(BookViewModel.class);
 
         FloatingActionButton scanNewBook = findViewById(R.id.scanNewBook);
         scanNewBook.setOnClickListener(new View.OnClickListener() {
@@ -90,8 +89,7 @@ public class ListNewBookActivity extends AppCompatActivity {
                         }
                         cpt++;
                     }
-                    //System.out.println(json.toString());
-                    String URL = "http://"+Token.ip+"/createLivreJSON";
+                    String URL = "http://"+Token.ip+"/createLivreFromAppli";
                     postResponse(ListNewBookActivity.this,Request.Method.POST, URL, json, new VolleyCallback() {
                         @Override
                         public void onSuccessResponse(String result) {
@@ -109,6 +107,8 @@ public class ListNewBookActivity extends AppCompatActivity {
                 }
             }
         });
+
+        mBookViewModel = ViewModelProviders.of(this).get(BookViewModel.class);
 
         mBookViewModel.getmAllBooks().observe(this, new Observer<List<Livre>>() {
             @Override

@@ -30,6 +30,8 @@ public class MatiereRepository {
 
     List<Matiere> getmAllMatieresForSpinner(){ return matiereDao.getmAllMatieresForSpinner(); }
 
+    List<String> getmAllMatieresNameForSpinner(){ return matiereDao.getmAllMatieresNameForSpinner(); }
+
     public void insert (Matiere book) {
         new MatiereRepository.insertAsyncTask(matiereDao).execute(book);
     }

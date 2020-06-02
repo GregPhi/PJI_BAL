@@ -25,6 +25,8 @@ public class MatiereViewModel extends AndroidViewModel {
 
     public List<Matiere> getmAllMatieresForSpinner(){ return mRepository.getmAllMatieresForSpinner(); }
 
+    public List<String> getmAllMatieresNameForSpinner(){ return mRepository.getmAllMatieresNameForSpinner(); }
+
     public void insert(Matiere matiere) { mRepository.insert(matiere); }
 
     public void updateBook(Matiere... matiere){

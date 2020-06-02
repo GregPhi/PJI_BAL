@@ -32,4 +32,7 @@ public interface MatiereDao {
 
     @Query("SELECT * FROM matiere_table ORDER BY nom ASC")
     List<Matiere> getmAllMatieresForSpinner();
+
+    @Query("SELECT nom FROM matiere_table ORDER BY nom ASC")
+    List<String> getmAllMatieresNameForSpinner();
 }

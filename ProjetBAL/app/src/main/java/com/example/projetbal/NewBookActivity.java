@@ -7,10 +7,13 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.projetbal.dataB.matiere.MatiereViewModel;
+import com.example.projetbal.object.book.Matiere;
 import com.example.projetbal.request.GET.book.BookLoader;
 import com.example.projetbal.request.GET.book.FetchBook;
 import com.example.projetbal.dataB.book.BookViewModel;
@@ -18,6 +21,9 @@ import com.example.projetbal.object.book.Livre;
 import com.example.projetbal.object.book.enumO.StatutsLivre;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,6 +34,8 @@ import androidx.loader.content.Loader;
 
 public class NewBookActivity extends AppCompatActivity implements View.OnClickListener, LoaderManager.LoaderCallbacks<String> {
     public static BookViewModel mBookViewModel;
+    public static MatiereViewModel matiereViewModel;
+
     private Livre newBook = null;
 
     private EditText mEditISBNView;
@@ -47,18 +55,28 @@ public class NewBookActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_book);
 
+        mBookViewModel = ViewModelProviders.of(this).get(BookViewModel.class);
+        matiereViewModel = MainActivity.matiereViewModel;
+
         mEditISBNView = findViewById(R.id.isbnScan);
 
         mEditCodeBarreView = findViewById(R.id.edit_cd);
         mEditTitleView = findViewById(R.id.edit_titre);
-        mSpinnerMatiere = findViewById(R.id.matiere);
+        mSpinnerMatiere = (Spinner) findViewById(R.id.matiere);
         mEditEditeurView = findViewById(R.id.editeur);
         mEditDescriptionView = findViewById(R.id.edit_descrip);
-        mSpinnerAnnee = findViewById(R.id.annee);
-        mSpinnerEtat = findViewById(R.id.etatLivre);
+        mSpinnerAnnee = (Spinner) findViewById(R.id.annee);
+        mSpinnerEtat = (Spinner) findViewById(R.id.etatLivre);
         mEditCommentaire = findViewById(R.id.commentaire);
 
-        mBookViewModel = ViewModelProviders.of(this).get(BookViewModel.class);
+        ArrayList<String> matieres = (ArrayList<String>) matiereViewModel.getmAllMatieresNameForSpinner();
+        if(!matieres.isEmpty()){
+            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, matieres);
+            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            mSpinnerMatiere.setAdapter(dataAdapter);
+        }else{
+
+        }
 
         if(getSupportLoaderManager().getLoader(0)!=null){
             getSupportLoaderManager().initLoader(0,null,this);

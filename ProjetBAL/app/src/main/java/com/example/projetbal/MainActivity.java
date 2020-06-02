@@ -17,6 +17,7 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HttpHeaderParser;
@@ -39,7 +40,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -69,7 +72,32 @@ public class MainActivity extends AppCompatActivity {
 
         String URL = "http://"+ Token.ip+"/getMatieres";
         if(isConnected()){
-            recupMatiere(MainActivity.this, Request.Method.GET, URL);
+            recupMatiere(MainActivity.this, Request.Method.GET, URL, new VolleyCallback() {
+                @Override
+                public void onSuccessResponse(String result) {
+                    try {
+                        JSONObject mat = new JSONObject(result);
+                        Iterator<String> keys = mat.keys();
+                        List<Matiere> ma = new ArrayList<>();
+                        while(keys.hasNext()){
+                            Matiere m = new Matiere();
+                            String k = keys.next();
+                            m.setNom(k);
+                            m.setId((Integer) mat.get(k));
+                            ma.add(m);
+                        }
+                        for(Matiere matt : ma){
+                            matiereViewModel.insert(matt);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                @Override
+                public void onSuccessResponse(JSONObject result) {
+                    return ;
+                }
+            });
         }else{
 
         }
@@ -222,31 +250,33 @@ public class MainActivity extends AppCompatActivity {
         VolleySingleton.getInstance(ctx).addToRequestQueue(stringRequest);
     }
 
-    public void recupMatiere(Context ctx, int method, String url) {
+    public void recupMatiere(Context ctx, int method, String url, final VolleyCallback volleyCallback) {
         RequestQueue requestQueue = VolleySingleton.getInstance(ctx).getRequestQueue();
         StringRequest stringRequest = new StringRequest(method, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                try {
-                    JSONObject mat = new JSONObject(response);
-                    System.out.println(mat.toString());
-                    Iterator<String> keys = mat.keys();
-                    while(keys.hasNext()){
-                        Matiere m = new Matiere();
-                        String k = keys.next();
-                        m.setNom(k);
-                        m.setId((Integer) mat.get(k));
-                        matiereViewModel.insert(m);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                //callback.onSuccessResponse(response);
+                volleyCallback.onSuccessResponse(response);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("VOLLEY", error.toString());
+            }
+        });
+        stringRequest.setRetryPolicy(new RetryPolicy() {
+            @Override
+            public int getCurrentTimeout() {
+                return 50000;
+            }
+
+            @Override
+            public int getCurrentRetryCount() {
+                return 50000;
+            }
+
+            @Override
+            public void retry(VolleyError error) throws VolleyError {
+
             }
         });
         VolleySingleton.getInstance(ctx).addToRequestQueue(stringRequest);

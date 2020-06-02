@@ -43,4 +43,5 @@
     <string name="scanner_un_code_barres">Scanner un code barres</string>
     <string name="statut_du_livre">Statut du livre</string>
     <string name="modifier_le_livre">Modifier le livre</string>
+
 </resources>

@@ -14,10 +14,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ListNewBookActivity"></activity>
-        <activity android:name=".NewBookActivity"></activity>
-        <activity android:name=".InfoBookActivity"></activity>
         <activity android:name=".PretRenduBookActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".ListNewBookActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".NewBookActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".InfoBookActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".InfoBookStatutActivity"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".MainActivity"
